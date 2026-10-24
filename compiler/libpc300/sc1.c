@@ -2992,9 +2992,13 @@ static void define_args(void)
       continue;
     for (level=0; level<arg->numdim; level++) {
       cell dimsize=arg->dim[level];
-      if (dimsize<=0
-          || (ucell)arraycells>((ucell)~0 >> 1)/(ucell)dimsize) {
+      if (dimsize<=0) {
         arraycells=0;
+        break;
+      }
+      if ((ucell)arraycells>((ucell)~0 >> 1)/(ucell)dimsize) {
+        arraycells=0;
+        error(90);
         break;
       }
       arraycells*=dimsize;

@@ -107,8 +107,9 @@ static char *errmsg[] = {
 /*085*/  "no states are defined for function \"%s\"\n",
 /*086*/  "unknown automaton \"%s\"\n",
 /*087*/  "unknown state \"%s\" for automaton \"%s\"\n",
-/*088*/  "number of arguments does not match definition\n"
-/*089*/  "public bool array arguments must have fixed dimensions\n"
+/*088*/  "number of arguments does not match definition\n",
+/*089*/  "public bool array arguments must have fixed dimensions\n",
+/*090*/  "bool array dimensions exceed the maximum runtime-check size\n"
        };
 
 static char *fatalmsg[] = {

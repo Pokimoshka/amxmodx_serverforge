@@ -196,3 +196,23 @@ if [[ "$output" != *"error 089:"* ]]; then
 fi
 
 echo "Unknown-size public bool array rejection check passed"
+
+cat > "$tmp_dir/oversized_public_array.sma" <<'EOF'
+public consume_bool_array(bool:values[46341][46341])
+{
+    return;
+}
+EOF
+
+if output=$("$tmp_dir/pawncc" "$tmp_dir/oversized_public_array.sma" \
+  "-i$root/plugins/include" -w213- -o"$tmp_dir/oversized_public_array.amx" 2>&1); then
+  echo "Public bool arrays larger than the runtime-check range must be rejected" >&2
+  exit 1
+fi
+if [[ "$output" != *"error 090:"* ]]; then
+  printf '%s\n' "$output" >&2
+  echo "Oversized public bool array test failed for an unexpected compiler error" >&2
+  exit 1
+fi
+
+echo "Oversized public bool array rejection check passed"
