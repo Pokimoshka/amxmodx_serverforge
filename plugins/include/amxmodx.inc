@@ -1168,8 +1168,8 @@ native get_user_ammo(index, weapon, &clip, &ammo);
  *
  * @note The conversion algorithm is limited to a certain range of numbers, but
  *       is guaranteed to work correctly for all numbers from 0 to 999. Outside
- *       of that range, the conversion will result in an incorrect string, but
- *       will not fail.
+ *       of that range, the conversion may result in an incorrect string. Values
+ *       whose magnitude exceeds 29999 are clamped to 29999.
  * @note The conversion is to english text, there is no way to change this.
  *
  * @param num       Integer to convert

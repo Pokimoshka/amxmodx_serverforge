@@ -27,10 +27,11 @@ int UTIL_ReadFlags(const char* c)
 
 void UTIL_GetFlags(char* f, int a)
 {
+	unsigned int flags = static_cast<unsigned int>(a);
 	for (int i = 'a'; i <= 'z'; ++i)
 	{
-		if (a & 1) *f++ = i;
-		a >>= 1;
+		if (flags & 1) *f++ = i;
+		flags >>= 1;
 	}
 
 	*f = 0;
@@ -119,7 +120,12 @@ void UTIL_IntToString(int value, char *output)
 		"hundred ","thousand "};
 	
 	*output = 0;
-	if (value < 0) value = -value;
+	if (value < -29999)
+		value = 29999;
+	else if (value < 0)
+		value = -value;
+	if (value > 29999)
+		value = 29999;
 	int tho = value / 1000;
 	int aaa = 0;
 	
