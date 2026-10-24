@@ -1476,6 +1476,7 @@ native read_argc();
  *
  * @note Example: The string "abcd" represents the sum of 1, 2, 4, and 8 - or
  *       (1<<0)|(1<<1)|(1<<2)|(1<<3). The function will return 15.
+ *       Characters outside the range "a" to "z" are ignored.
  *
  * @param flags     Flag string to convert
  *

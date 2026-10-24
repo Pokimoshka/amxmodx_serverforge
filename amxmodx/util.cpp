@@ -16,7 +16,11 @@ int UTIL_ReadFlags(const char* c)
 	int flags = 0;
 	
 	while (*c)
-		flags |= (1<<(*c++ - 'a'));
+	{
+		unsigned char flag = static_cast<unsigned char>(*c++);
+		if (flag >= 'a' && flag <= 'z')
+			flags |= 1 << (flag - 'a');
+	}
 	
 	return flags;
 }
