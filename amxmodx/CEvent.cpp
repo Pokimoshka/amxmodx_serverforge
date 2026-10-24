@@ -116,14 +116,18 @@ int EventsMngr::ClEvent::getFunction()
 }
 
 EventsMngr::EventsMngr()
+	: m_ParseVault(nullptr),
+	  m_ReadVault(nullptr),
+	  m_ParseVaultSize(0),
+	  m_ReadVaultSize(0),
+	  m_ParseFun(nullptr),
+	  m_ParseNotDone(false),
+	  m_ParsePos(-1),
+	  m_ReadPos(-1),
+	  m_Timer(nullptr),
+	  m_ParseMsgType(-1),
+	  m_ReadMsgType(-1)
 {
-	m_ParseVault = NULL;
-	m_ParseVaultSize = 0;
-	m_ParseMsgType = -1;
-	m_ReadVault = NULL;
-	m_ReadVaultSize = 0;
-	m_ReadPos = -1;
-	m_ReadMsgType = -1;
 	clearEvents();
 }
 
@@ -547,6 +551,14 @@ float EventsMngr::getArgFloat(int a) const
 
 void EventsMngr::clearEvents(void)
 {
+	m_ParseFun = nullptr;
+	m_ParseNotDone = false;
+	m_ParsePos = -1;
+	m_ReadPos = -1;
+	m_Timer = nullptr;
+	m_ParseMsgType = -1;
+	m_ReadMsgType = -1;
+
 	for (int i = 0; i < MAX_AMX_REG_MSG; ++i)
 	{
 		m_Events[i].clear();
@@ -558,17 +570,16 @@ void EventsMngr::clearEvents(void)
 	if (m_ParseVault)
 	{
 		delete [] m_ParseVault;
-		m_ParseVault = NULL;
-		m_ParseVaultSize = 0;
 	}
+	m_ParseVault = nullptr;
+	m_ParseVaultSize = 0;
 
 	if (m_ReadVault)
 	{
 		delete [] m_ReadVault;
-		m_ReadVault = NULL;
-		m_ReadVaultSize = 0;
-		m_ReadPos = -1;
 	}
+	m_ReadVault = nullptr;
+	m_ReadVaultSize = 0;
 }
 
 int EventsMngr::getEventId(const char* msg)
