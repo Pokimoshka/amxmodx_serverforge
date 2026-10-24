@@ -660,6 +660,7 @@ SC_FUNC void dec(value *lval);
 SC_FUNC void jmp_ne0(int number);
 SC_FUNC void jmp_eq0(int number);
 SC_FUNC void boolcheck(void);
+SC_FUNC void boolarrframecheck(int argidx,cell arraycells);
 SC_FUNC void outval(cell val,int newline);
 
 /* function prototypes in SC5.C */

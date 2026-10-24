@@ -266,6 +266,7 @@ typedef enum {
   OP_BOOLCHK,
   OP_BOOLREFCHK,
   OP_BOOLARRAYCHK,
+  OP_BOOLARRAYFRMCHK,
   /* ----- */
   OP_NUM_OPCODES
 } OPCODE;
@@ -747,6 +748,9 @@ static int amx_BrowseRelocate(AMX *amx)
       cip+=sizeof(cell);
       break;
     case OP_BOOLARRAYCHK:
+      cip+=2*sizeof(cell);
+      break;
+    case OP_BOOLARRAYFRMCHK:
       cip+=2*sizeof(cell);
       break;
     case OP_CASETBL: {
@@ -1744,7 +1748,7 @@ static const void * const amx_opcodelist[] = {
         &&op_symtag,    &&op_break,
         &&op_none,      &&op_none,      &&op_none,      &&op_none,
         &&op_none,      &&op_none,      &&op_none,      &&op_boolchk,
-        &&op_boolrefchk, &&op_boolarraychk };
+        &&op_boolrefchk, &&op_boolarraychk, &&op_boolarrayfrmchk };
   AMX_HEADER *hdr;
   AMX_FUNCSTUB *func;
   unsigned char *code, *data;
@@ -2631,7 +2635,40 @@ static const void * const amx_opcodelist[] = {
     PUSH(frm+offs);
     NEXT(cip);
   op_nop:
-    NEXT(cip);
+      NEXT(cip);
+    op_boolarrayfrmchk:
+      GETPARAM(offs);
+      GETPARAM(offs2);
+      if (offs<0 || offs2<0 || frm<0
+          || frm>amx->stp-3*(cell)sizeof(cell))
+        ABORT(amx,AMX_ERR_PARAMS);
+      {
+        cell argsbytes=*(cell *)(data+(int)frm+2*sizeof(cell));
+        if (argsbytes<0 || argsbytes%(cell)sizeof(cell)!=0
+            || argsbytes>amx->stp-frm-3*(cell)sizeof(cell)
+            || offs>=argsbytes/(cell)sizeof(cell))
+          ABORT(amx,AMX_ERR_PARAMS);
+        {
+          cell *argaddr;
+          cell array_addr;
+          num=amx_GetAddr(amx,frm+(offs+3)*sizeof(cell),&argaddr);
+          if (num!=AMX_ERR_NONE)
+            ABORT(amx,num);
+          array_addr=*argaddr;
+          if (array_addr<0 || array_addr>amx->stp
+              || (ucell)offs2>(ucell)(amx->stp-array_addr)/(ucell)sizeof(cell))
+            ABORT(amx,AMX_ERR_MEMACCESS);
+          for (i=0; i<offs2; i++) {
+            cell *array;
+            num=amx_GetAddr(amx,array_addr+i*sizeof(cell),&array);
+            if (num!=AMX_ERR_NONE)
+              ABORT(amx,num);
+            if (*array!=0 && *array!=1)
+              ABORT(amx,AMX_ERR_TYPE);
+          }
+        }
+      }
+      NEXT(cip);
   op_break:
     if (amx->debug!=NULL) {
       /* store status */
@@ -3638,6 +3675,39 @@ int AMXAPI amx_Exec(AMX *amx, cell *retval, int index)
             ABORT(amx,num);
           if (*array!=0 && *array!=1)
             ABORT(amx,AMX_ERR_TYPE);
+        }
+      }
+      break;
+    case OP_BOOLARRAYFRMCHK:
+      GETPARAM(offs);
+      GETPARAM(offs2);
+      if (offs<0 || offs2<0 || frm<0
+          || frm>amx->stp-3*(cell)sizeof(cell))
+        ABORT(amx,AMX_ERR_PARAMS);
+      {
+        cell argsbytes=*(cell *)(data+(int)frm+2*sizeof(cell));
+        if (argsbytes<0 || argsbytes%(cell)sizeof(cell)!=0
+            || argsbytes>amx->stp-frm-3*(cell)sizeof(cell)
+            || offs>=argsbytes/(cell)sizeof(cell))
+          ABORT(amx,AMX_ERR_PARAMS);
+        {
+          cell *argaddr;
+          cell array_addr;
+          num=amx_GetAddr(amx,frm+(offs+3)*sizeof(cell),&argaddr);
+          if (num!=AMX_ERR_NONE)
+            ABORT(amx,num);
+          array_addr=*argaddr;
+          if (array_addr<0 || array_addr>amx->stp
+              || (ucell)offs2>(ucell)(amx->stp-array_addr)/(ucell)sizeof(cell))
+            ABORT(amx,AMX_ERR_MEMACCESS);
+          for (i=0; i<offs2; i++) {
+            cell *array;
+            num=amx_GetAddr(amx,array_addr+i*sizeof(cell),&array);
+            if (num!=AMX_ERR_NONE)
+              ABORT(amx,num);
+            if (*array!=0 && *array!=1)
+              ABORT(amx,AMX_ERR_TYPE);
+          }
         }
       }
       break;

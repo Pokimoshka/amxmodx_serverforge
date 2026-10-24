@@ -145,10 +145,11 @@ extern  "C" {
  *   9 (runtime bool check opcode)              9
  *  10 (runtime bool reference check opcode)   10
  *  11 (runtime bool array check opcode)      11
+ *  12 (runtime bool function-array check opcode) 12
  */
-#define CUR_FILE_VERSION  11    /* current file version; also the current AMX version */
+#define CUR_FILE_VERSION  12    /* current file version; also the current AMX version */
 #define MIN_FILE_VERSION  6     /* lowest supported file format version for the current AMX version */
-#define MIN_AMX_VERSION   11    /* minimum AMX version needed to support the current file format */
+#define MIN_AMX_VERSION   12    /* minimum AMX version needed to support the current file format */
 
 #if !defined PAWN_CELL_SIZE
   #define PAWN_CELL_SIZE 32     /* by default, use 32-bit cells */

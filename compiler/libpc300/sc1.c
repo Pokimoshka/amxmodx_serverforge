@@ -2958,6 +2958,8 @@ SC_FUNC symbol *fetchfunc(char *name,int tag)
 static void define_args(void)
 {
   symbol *sym;
+  arginfo *arg;
+  int argidx,level;
 
   /* At this point, no local variables have been declared. All
    * local symbols are function arguments.
@@ -2978,6 +2980,28 @@ static void define_args(void)
     }
     sym=sym->next;
   } /* while */
+
+  if (curfunc==NULL)
+    return;
+  for (argidx=0, arg=curfunc->dim.arglist;
+       arg->ident!=0;
+       argidx++, arg++) {
+    cell arraycells=1;
+    if (arg->ident!=iREFARRAY || arg->numtags==0
+        || arg->tags[0]!=pc_addtag("bool") || arg->numdim==0)
+      continue;
+    for (level=0; level<arg->numdim; level++) {
+      cell dimsize=arg->dim[level];
+      if (dimsize<=0
+          || (ucell)arraycells>((ucell)~0 >> 1)/(ucell)dimsize) {
+        arraycells=0;
+        break;
+      }
+      arraycells*=dimsize;
+    }
+    if (arraycells>0)
+      boolarrframecheck(argidx,arraycells);
+  }
 }
 
 static int operatorname(char *name)
@@ -3456,6 +3480,21 @@ static int newfunc(char *firstname,int firsttag,int fpublic,int fstatic,int stoc
     delete_symbols(&loctab,0,TRUE,TRUE);  /* prototype is done; forget everything */
     return TRUE;
   } /* if */
+  if ((sym->usage & uPUBLIC)!=0) {
+    arginfo *arg;
+    for (arg=sym->dim.arglist; arg->ident!=0; arg++) {
+      int level;
+      if (arg->ident!=iREFARRAY || arg->numtags==0
+          || arg->tags[0]!=pc_addtag("bool"))
+        continue;
+      for (level=0; level<arg->numdim; level++) {
+        if (arg->dim[level]<=0) {
+          error(89); /* public bool arrays require a fixed ABI-visible extent */
+          break;
+        }
+      }
+    }
+  }
   /* so it is not a prototype, proceed */
   /* if this is a function that is not referred to (this can only be detected
    * in the second stage), shut code generation off */

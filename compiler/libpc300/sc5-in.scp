@@ -108,6 +108,7 @@ static char *errmsg[] = {
 /*086*/  "unknown automaton \"%s\"\n",
 /*087*/  "unknown state \"%s\" for automaton \"%s\"\n",
 /*088*/  "number of arguments does not match definition\n"
+/*089*/  "public bool array arguments must have fixed dimensions\n"
        };
 
 static char *fatalmsg[] = {

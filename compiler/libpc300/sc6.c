@@ -407,6 +407,7 @@ static OPCODE opcodelist[] = {
   { 29, "align.pri",  sIN_CSEG, parm1 },
   { 81, "and",        sIN_CSEG, parm0 },
   {147, "boolarrchk", sIN_CSEG, parm2 }, /* version 11 */
+  {148, "boolarrfrmchk", sIN_CSEG, parm2 }, /* version 12 */
   {145, "boolchk",    sIN_CSEG, parm0 }, /* version 9 */
   {146, "boolrefchk", sIN_CSEG, parm1 }, /* version 10 */
   {121, "bounds",     sIN_CSEG, parm1 },

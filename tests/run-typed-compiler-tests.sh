@@ -21,6 +21,11 @@ native native_consume(bool:value);
 native native_ref(bool:prefix, &bool:value);
 native native_array(bool:values[]);
 
+public bool:consume_bool_array(bool:values[3])
+{
+    return values[0];
+}
+
 stock pawn_ref(&bool:value)
 {
     value = true;
@@ -82,12 +87,15 @@ header = struct.unpack_from("<I H B B h h 11i", data)
 code_start, data_start = header[6:8]
 code = struct.unpack("<%di" % ((data_start - code_start) // 4),
                      data[code_start:data_start])
-assert header[2] >= 11, "typed bytecode must use format version 11"
-assert header[3] >= 11, "typed bytecode must require AMX version 11"
+assert header[2] >= 12, "typed bytecode must use format version 12"
+assert header[3] >= 12, "typed bytecode must require AMX version 12"
 assert header[4] & 0x40, "bool bytecode must set AMX_FLAG_TYPED"
 assert code.count(145) >= 10, "bool arguments, storage, reads, returns, and native boundaries need checks"
 assert code.count(146) == 6, f"bool reference check count is {code.count(146)}, expected pre/post checks for Pawn and native calls"
 assert code.count(147) == 4, f"bool array check count is {code.count(147)}, expected pre/post checks for Pawn and native calls"
+assert code.count(148) == 1, "fixed-size bool function parameters need an entry check"
+assert any(code[index:index + 3] == (148, 0, 3)
+           for index in range(len(code) - 2)), "entry check must use the bool array argument index and exact size"
 assert any(code[index:index + 2] == (146, 1)
            for index in range(len(code) - 1)), "boolrefchk must target the correct native argument"
 assert any(code[index:index + 3] == (147, 0, 3)
@@ -124,8 +132,8 @@ code_start, data_start = header[6:8]
 code = struct.unpack("<%di" % ((data_start - code_start) // 4),
                      data[code_start:data_start])
 assert not header[4] & 0x40, "untyped code must not set AMX_FLAG_TYPED"
-assert header[2] == 10 and header[3] == 10, "untyped code must remain loadable by version-10 AMX runtimes"
-assert 145 not in code and 146 not in code and 147 not in code
+assert header[2] == 11 and header[3] == 11, "untyped code must remain loadable by version-11 AMX runtimes"
+assert all(opcode not in code for opcode in (145, 146, 147, 148))
 print("Untyped compiler compatibility check passed")
 PY
 
@@ -168,3 +176,23 @@ if [[ "$output" != *"error 048:"* ]]; then
 fi
 
 echo "Unknown-size typed native array rejection check passed"
+
+cat > "$tmp_dir/unknown_public_array_size.sma" <<'EOF'
+public consume_bool_array(bool:values[])
+{
+    return;
+}
+EOF
+
+if output=$("$tmp_dir/pawncc" "$tmp_dir/unknown_public_array_size.sma" \
+  "-i$root/plugins/include" -w213- -o"$tmp_dir/unknown_public_array_size.amx" 2>&1); then
+  echo "Public bool arrays with unknown runtime sizes must be rejected" >&2
+  exit 1
+fi
+if [[ "$output" != *"error 089:"* ]]; then
+  printf '%s\n' "$output" >&2
+  echo "Unknown-size public bool array test failed for an unexpected compiler error" >&2
+  exit 1
+fi
+
+echo "Unknown-size public bool array rejection check passed"

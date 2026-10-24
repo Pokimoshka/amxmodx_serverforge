@@ -1420,6 +1420,18 @@ SC_FUNC void boolcheck(void)
     sc_typed=TRUE;
 }
 
+SC_FUNC void boolarrframecheck(int argidx,cell arraycells)
+{
+  stgwrite("\tboolarrfrmchk ");
+  outval(argidx,FALSE);
+  stgwrite(" ");
+  outval(arraycells,FALSE);
+  stgwrite("\n");
+  code_idx+=opcodes(1)+opargs(2);
+  if (sc_status==statWRITE)
+    sc_typed=TRUE;
+}
+
 /* write a value in hexadecimal; optionally adds a newline */
 SC_FUNC void outval(cell val,int newline)
 {

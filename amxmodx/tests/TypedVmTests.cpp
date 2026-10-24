@@ -41,7 +41,8 @@ static int unused_callback(AMX *, cell, cell *, cell *)
 }
 
 static int run_program(const cell *instructions, size_t instruction_count, cell *result,
-                       cell stack_offset = -1, const cell *initial_data = NULL)
+                       cell stack_offset = -1, const cell *initial_data = NULL,
+                       cell frame_offset = 0)
 {
 	const size_t code_offset = sizeof(AMX_HEADER);
 	const size_t code_size = instruction_count * sizeof(cell);
@@ -75,6 +76,7 @@ static int run_program(const cell *instructions, size_t instruction_count, cell 
 	amx.stk = stack_offset < 0 ? amx.stp : stack_offset;
 	if (stack_offset >= 0) {
 		amx.cip = 0;
+		amx.frm = frame_offset;
 		amx.reset_stk = amx.stk;
 		amx.reset_hea = amx.hea;
 		return amx_Exec(&amx, result, AMX_EXEC_CONT);
@@ -115,6 +117,23 @@ static int run_bool_array_check(cell third_value, cell array_address)
 	                   60 * sizeof(cell), data);
 }
 
+static int run_bool_frame_array_check(cell third_value, cell array_address,
+                                      cell arg_index = 0,
+                                      cell args_bytes = sizeof(cell),
+                                      cell frame_offset = 45 * sizeof(cell))
+{
+	const cell program[] = {148, arg_index, 3, 120, 0};
+	cell data[64] = {0};
+	data[4] = 0;
+	data[5] = 1;
+	data[6] = third_value;
+	data[frame_offset / sizeof(cell) + 2] = args_bytes;
+	data[frame_offset / sizeof(cell) + 3 + arg_index] = array_address;
+	cell result = 0;
+	return run_program(program, sizeof(program) / sizeof(program[0]), &result,
+	                   frame_offset, data, frame_offset);
+}
+
 int main()
 {
 	CHECK_ERROR(run_bool_check(0), AMX_ERR_NONE);
@@ -125,5 +144,15 @@ int main()
 	CHECK_ERROR(run_bool_array_check(0, sizeof(cell)), AMX_ERR_NONE);
 	CHECK_ERROR(run_bool_array_check(2, sizeof(cell)), AMX_ERR_TYPE);
 	CHECK_ERROR(run_bool_array_check(0, 62 * sizeof(cell)), AMX_ERR_MEMACCESS);
+	CHECK_ERROR(run_bool_frame_array_check(0, 4 * sizeof(cell)), AMX_ERR_NONE);
+	CHECK_ERROR(run_bool_frame_array_check(2, 4 * sizeof(cell)), AMX_ERR_TYPE);
+	CHECK_ERROR(run_bool_frame_array_check(0, 63 * sizeof(cell)), AMX_ERR_MEMACCESS);
+	CHECK_ERROR(run_bool_frame_array_check(0, 4 * sizeof(cell), 1),
+	            AMX_ERR_PARAMS);
+	CHECK_ERROR(run_bool_frame_array_check(0, 4 * sizeof(cell), 0, 1),
+	            AMX_ERR_PARAMS);
+	CHECK_ERROR(run_bool_frame_array_check(0, 4 * sizeof(cell), 0,
+	                                      sizeof(cell), 60 * sizeof(cell)),
+	            AMX_ERR_PARAMS);
 	return 0;
 }
