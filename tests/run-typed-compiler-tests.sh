@@ -36,6 +36,13 @@ stock bool:returns_invalid()
     return 2;
 }
 
+public bool:public_bool(bool:value, &bool:reference_value)
+{
+    if (value && reference_value)
+        return true;
+    return false;
+}
+
 stock set_invalid(&bool:value)
 {
     value = 2;
@@ -78,7 +85,7 @@ code = struct.unpack("<%di" % ((data_start - code_start) // 4),
 assert header[2] >= 11, "typed bytecode must use format version 11"
 assert header[3] >= 11, "typed bytecode must require AMX version 11"
 assert header[4] & 0x40, "bool bytecode must set AMX_FLAG_TYPED"
-assert code.count(145) >= 8, "bool storage, reads, returns, and native boundaries need checks"
+assert code.count(145) >= 10, "bool arguments, storage, reads, returns, and native boundaries need checks"
 assert code.count(146) == 6, f"bool reference check count is {code.count(146)}, expected pre/post checks for Pawn and native calls"
 assert code.count(147) == 4, f"bool array check count is {code.count(147)}, expected pre/post checks for Pawn and native calls"
 assert any(code[index:index + 2] == (146, 1)

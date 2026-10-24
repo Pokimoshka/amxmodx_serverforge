@@ -2967,6 +2967,15 @@ static void define_args(void)
     assert(sym->ident!=iLABEL);
     assert(sym->vclass==sLOCAL);
     markexpr(sLDECL,sym->name,sym->addr); /* mark for better optimization */
+    if (sym->tag==pc_addtag("bool")
+        && (sym->ident==iVARIABLE || sym->ident==iREFERENCE)) {
+      value argvalue;
+      memset(&argvalue,0,sizeof argvalue);
+      argvalue.sym=sym;
+      argvalue.ident=sym->ident;
+      argvalue.tag=sym->tag;
+      rvalue(&argvalue);
+    }
     sym=sym->next;
   } /* while */
 }
