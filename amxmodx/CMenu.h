@@ -59,7 +59,7 @@ private:
 	
 public:
 	MenuMngr() : m_watch_iter(end())
-		{ headid = NULL; headcmd = NULL; }
+		{ headid = nullptr; headcmd = nullptr; }
 	~MenuMngr();
 
 	// Interface

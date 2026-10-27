@@ -37,7 +37,7 @@ struct lang_err
 class defentry
 {
 public:
-	defentry() : definition(NULL)
+	defentry() : definition(nullptr)
 	{
 	};
 	defentry(const defentry &src)

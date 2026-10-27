@@ -168,7 +168,7 @@ void AddString(U **buf_p, size_t &maxlen, const S *string, int width, int prec)
 
 	buf = *buf_p;
 
-	if (string == NULL)
+	if (string == nullptr)
 	{
 		string = nlstr;
 		prec = -1;
@@ -715,7 +715,7 @@ reswitch:
 				char buffer[255];
 				if (*addr)
 				{
-					CPlayer *player = NULL;
+					CPlayer *player = nullptr;
 
 					if (*addr >= 1 && *addr <= gpGlobals->maxClients)
 					{
@@ -754,7 +754,7 @@ reswitch:
 
 				if (*addr)
 				{
-					CPlayer *player = NULL;
+					CPlayer *player = nullptr;
 
 					if (*addr >= 1 && *addr <= gpGlobals->maxClients)
 					{
@@ -819,10 +819,10 @@ done:
 void __WHOA_DONT_CALL_ME_PLZ_K_lol_o_O()
 {
 	//acsprintf
-	atcprintf((cell *)NULL, 0, (const char *)NULL, NULL, NULL, NULL);
+	atcprintf((cell *)nullptr, 0, (const char *)nullptr, nullptr, nullptr, nullptr);
 	//accprintf
-	atcprintf((cell *)NULL, 0, (cell *)NULL, NULL, NULL, NULL);
+	atcprintf((cell *)nullptr, 0, (cell *)nullptr, nullptr, nullptr, nullptr);
 	//ascprintf
-	atcprintf((char *)NULL, 0, (cell *)NULL, NULL, NULL, NULL);
+	atcprintf((char *)nullptr, 0, (cell *)nullptr, nullptr, nullptr, nullptr);
 }
 

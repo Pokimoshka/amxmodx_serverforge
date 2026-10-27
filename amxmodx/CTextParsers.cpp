@@ -104,7 +104,7 @@ SMCError TextParsers::ParseFile_SMC(const char *file, ITextListener_SMC *smc, SM
 
 	if (!fp)
 	{
-		if (states != NULL)
+		if (states != nullptr)
 		{
 			states->line = 0;
 			states->col = 0;
@@ -128,10 +128,10 @@ SMCError TextParsers::ParseSMCFile(const char *file,
 	const char *errstr;
 	FILE *fp = fopen(file, "rt");
 
-	if (fp == NULL)
+	if (fp == nullptr)
 	{
 		char error[256] = "unknown";
-		if (states != NULL)
+		if (states != nullptr)
 		{
 			states->line = 0;
 			states->col = 0;
@@ -146,7 +146,7 @@ SMCError TextParsers::ParseSMCFile(const char *file,
 	fclose(fp);
 
 	errstr = GetSMCErrorString(result);
-	ke::SafeSprintf(buffer, maxsize, "%s", errstr != NULL ? errstr : "Unknown error");
+	ke::SafeSprintf(buffer, maxsize, "%s", errstr != nullptr ? errstr : "Unknown error");
 
 	return result;
 }
@@ -197,7 +197,7 @@ SMCError TextParsers::ParseSMCStream(const char *stream,
 	result = ParseStream_SMC(&rs, RawStreamReader, smc_listener, states);
 
 	const char *errstr = GetSMCErrorString(result);
-	ke::SafeSprintf(buffer, maxsize, "%s", errstr != NULL ? errstr : "Unknown error");
+	ke::SafeSprintf(buffer, maxsize, "%s", errstr != nullptr ? errstr : "Unknown error");
 
 	return result;
 }
@@ -208,7 +208,7 @@ SMCError TextParsers::ParseSMCStream(const char *stream,
 
 struct StringInfo
 {
-	StringInfo() : quoted(false), ptr(NULL), end(NULL), special(false) { }
+	StringInfo() : quoted(false), ptr(nullptr), end(nullptr), special(false) { }
 	bool quoted;
 	char *ptr;
 	char *end;
@@ -219,7 +219,7 @@ const char *FixupString(StringInfo &data)
 {
 	if (!data.ptr)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	if (data.quoted)
@@ -280,19 +280,19 @@ const char *FixupString(StringInfo &data)
 
 const char *rotate(StringInfo info[3])
 {
-	if (info[2].ptr != NULL)
+	if (info[2].ptr != nullptr)
 	{
 		return info[2].ptr;
 	}
 
-	if (info[0].ptr != NULL)
+	if (info[0].ptr != nullptr)
 	{
 		info[2] = info[1];
 		info[1] = info[0];
 		info[0] = StringInfo();
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 void scrap(StringInfo info[3])
@@ -324,7 +324,7 @@ char *lowstring(StringInfo info[3])
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 SMCError TextParsers::ParseStream_SMC(void *stream,
@@ -332,7 +332,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 	ITextListener_SMC *smc,
 	SMCStates *pStates)
 {
-	char *reparse_point = NULL;
+	char *reparse_point = nullptr;
 	char in_buf[4096];
 	char *parse_point = in_buf;
 	char *line_begin = in_buf;
@@ -389,7 +389,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 		{
 			read += (parse_point - reparse_point);
 			parse_point = reparse_point;
-			reparse_point = NULL;
+			reparse_point = nullptr;
 		}
 
 		for (i = 0; i<read; i++)
@@ -403,7 +403,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 				if (strings[0].ptr)
 				{
 					strings[0].end = &parse_point[i];
-					if (rotate(strings) != NULL)
+					if (rotate(strings) != nullptr)
 					{
 						err = SMCError_InvalidTokens;
 						goto failed;
@@ -469,7 +469,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 						/* Set our info */
 						strings[0].end = &parse_point[i];
 						strings[0].quoted = true;
-						if (rotate(strings) != NULL)
+						if (rotate(strings) != nullptr)
 						{
 							/* If we rotated too many strings, there was too much crap on one line */
 							err = SMCError_InvalidTokens;
@@ -501,7 +501,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 							ml_comment = false;
 							ignoring = false;
 							/* We should not be staging anything right now. */
-							assert(strings[0].ptr == NULL);
+							assert(strings[0].ptr == nullptr);
 							/* Advance the input stream so we don't choke on this token */
 							i++;
 							states.col++;
@@ -570,19 +570,19 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 						if (strings[0].ptr)
 						{
 							/* We have unacceptable tokens on this line */
-							if (rotate(strings) != NULL)
+							if (rotate(strings) != nullptr)
 							{
 								err = SMCError_InvalidSection1;
 								goto failed;
 							}
 						}
 						/* Sections must always be alone */
-						if (strings[2].ptr != NULL)
+						if (strings[2].ptr != nullptr)
 						{
 							err = SMCError_InvalidSection1;
 							goto failed;
 						}
-						else if (strings[1].ptr == NULL)
+						else if (strings[1].ptr == nullptr)
 						{
 							err = SMCError_InvalidSection2;
 							goto failed;
@@ -599,7 +599,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 					else if (c == '}')
 					{
 						/* Unlike our matching friend, this can be on the same line as something prior */
-						if (rotate(strings) != NULL)
+						if (rotate(strings) != nullptr)
 						{
 							err = SMCError_InvalidSection3;
 							goto failed;
@@ -646,7 +646,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 						if (strings[0].ptr)
 						{
 							strings[0].end = &parse_point[i];
-							if (rotate(strings) != NULL)
+							if (rotate(strings) != nullptr)
 							{
 								err = SMCError_InvalidTokens;
 								goto failed;
@@ -664,7 +664,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 					if (restage && strings[0].ptr)
 					{
 						strings[0].end = &parse_point[i];
-						if (rotate(strings) != NULL)
+						if (rotate(strings) != nullptr)
 						{
 							err = SMCError_InvalidTokens;
 							goto failed;
@@ -755,7 +755,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 
 	smc->ReadSMC_ParseEnd(false, false);
 
-	if (pStates != NULL)
+	if (pStates != nullptr)
 	{
 		*pStates = states;
 	}
@@ -763,7 +763,7 @@ SMCError TextParsers::ParseStream_SMC(void *stream,
 	return SMCError_Okay;
 
 failed:
-	if (pStates != NULL)
+	if (pStates != nullptr)
 	{
 		*pStates = states;
 	}
@@ -806,7 +806,7 @@ bool TextParsers::ParseFile_INI(const char *file, ITextListener_INI *ini_listene
 		curline++;
 		curtok = 0;
 		buffer[0] = '\0';
-		if (fgets(buffer, sizeof(buffer), fp) == NULL)
+		if (fgets(buffer, sizeof(buffer), fp) == nullptr)
 		{
 			break;
 		}
@@ -965,7 +965,7 @@ bool TextParsers::ParseFile_INI(const char *file, ITextListener_INI *ini_listene
 		}
 		else {
 			char *key_ptr = ptr;
-			char *val_ptr = NULL;
+			char *val_ptr = nullptr;
 			char c;
 			size_t first_space = 0;
 			bool invalid_tokens = false;
@@ -1041,7 +1041,7 @@ bool TextParsers::ParseFile_INI(const char *file, ITextListener_INI *ini_listene
 				}
 				if (*val_ptr == '\0')
 				{
-					val_ptr = NULL;
+					val_ptr = nullptr;
 					goto skip_value;
 				}
 				/* Do we have an initial quote? If so, the parsing rules change! */
@@ -1110,10 +1110,10 @@ const char *TextParsers::GetSMCErrorString(SMCError err)
 {
 	static const char *s_errors[] =
 	{
-		NULL,
+		nullptr,
 		"Stream failed to open",
 		"Stream returned read error",
-		NULL,
+		nullptr,
 		"Un-quoted section has invalid tokens",
 		"Section declared without header",
 		"Section declared with unknown tokens",
@@ -1126,7 +1126,7 @@ const char *TextParsers::GetSMCErrorString(SMCError err)
 
 	if (err < SMCError_Okay || err > SMCError_InvalidProperty1)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	return s_errors[err];

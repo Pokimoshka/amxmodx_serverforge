@@ -19,7 +19,7 @@ float *msgOrigin;
 edict_t *msgpEntity;
 bool inhook = false;
 bool inblock = false;
-enginefuncs_t *g_pEngTable = NULL;
+enginefuncs_t *g_pEngTable = nullptr;
 
 void ClearMessages()
 {
@@ -62,7 +62,7 @@ Message::~Message()
 
 msgparam *Message::AdvPtr()
 {
-	msgparam *pParam = NULL;
+	msgparam *pParam = nullptr;
 
 	if (++m_CurParam >= m_Params.length())
 	{
@@ -167,7 +167,7 @@ size_t Message::Params()
 
 void Message::Send()
 {
-	msgparam *pParam = NULL;
+	msgparam *pParam = nullptr;
 
 	for (size_t i=1; i<=m_CurParam; i++)
 	{
@@ -377,7 +377,7 @@ static cell _message_begin(AMX *amx, cell *params, bool useFloat) /* 4 param */
 	cell *cpOrigin;
 
 	if (params[2] < 1 || ((params[2] > 63)		// maximal number of engine messages
-		&& !GET_USER_MSG_NAME(PLID, params[2], NULL)))
+		&& !GET_USER_MSG_NAME(PLID, params[2], nullptr)))
 	{
 		LogError(amx, AMX_ERR_NATIVE, "Plugin called message_begin with an invalid message id (%d).", params[2]);
 		return 0;
@@ -389,7 +389,7 @@ static cell _message_begin(AMX *amx, cell *params, bool useFloat) /* 4 param */
 	case MSG_ALL:
 	case MSG_SPEC:
 	case MSG_INIT:
-		MESSAGE_BEGIN(params[1], params[2], NULL);
+		MESSAGE_BEGIN(params[1], params[2], nullptr);
 		break;
 	case MSG_PVS: case MSG_PAS:
 	case MSG_PVS_R: case MSG_PAS_R:
@@ -423,7 +423,7 @@ static cell _message_begin(AMX *amx, cell *params, bool useFloat) /* 4 param */
 			return 0;
 		}
 
-		MESSAGE_BEGIN(params[1], params[2], NULL, TypeConversion.id_to_edict(params[4]));
+		MESSAGE_BEGIN(params[1], params[2], nullptr, TypeConversion.id_to_edict(params[4]));
 		break;
 	}
 
@@ -726,7 +726,7 @@ static cell _emessage_begin(AMX *amx, cell *params, bool useFloat)
 	cell *cpOrigin;
 
 	if (params[2] < 1 || ((params[2] > 63)		// maximal number of engine messages
-		&& !GET_USER_MSG_NAME(PLID, params[2], NULL)))
+		&& !GET_USER_MSG_NAME(PLID, params[2], nullptr)))
 	{
 		LogError(amx, AMX_ERR_NATIVE, "Plugin called message_begin with an invalid message id (%d).", params[2]);
 		return 0;
@@ -737,7 +737,7 @@ static cell _emessage_begin(AMX *amx, cell *params, bool useFloat)
 	case MSG_BROADCAST:
 	case MSG_ALL:
 	case MSG_SPEC:
-		g_pEngTable->pfnMessageBegin(params[1], params[2], NULL, NULL);
+		g_pEngTable->pfnMessageBegin(params[1], params[2], nullptr, nullptr);
 		break;
 	case MSG_PVS: case MSG_PAS:
 	case MSG_PVS_R: case MSG_PAS_R:
@@ -760,7 +760,7 @@ static cell _emessage_begin(AMX *amx, cell *params, bool useFloat)
 			vecOrigin[2] = amx_ctof(*(cpOrigin + 2));
 		}
 
-		g_pEngTable->pfnMessageBegin(params[1], params[2], vecOrigin, NULL);
+		g_pEngTable->pfnMessageBegin(params[1], params[2], vecOrigin, nullptr);
 
 		break;
 	case MSG_ONE_UNRELIABLE:
@@ -771,7 +771,7 @@ static cell _emessage_begin(AMX *amx, cell *params, bool useFloat)
 			return 0;
 		}
 
-		g_pEngTable->pfnMessageBegin(params[1], params[2], NULL, TypeConversion.id_to_edict(params[4]));
+		g_pEngTable->pfnMessageBegin(params[1], params[2], nullptr, TypeConversion.id_to_edict(params[4]));
 		break;
 	}
 
@@ -904,5 +904,5 @@ AMX_NATIVE_INFO msg_Natives[] =
 	{"ewrite_short",		ewrite_short},
 	{"ewrite_string",		ewrite_string},
 
-	{NULL,					NULL},
+	{nullptr,					nullptr},
 };

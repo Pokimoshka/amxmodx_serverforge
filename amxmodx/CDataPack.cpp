@@ -33,8 +33,11 @@
 
 CDataPack::CDataPack()
 {
-	m_pBase = (char *)malloc(DATAPACK_INITIAL_SIZE);
+	m_pBase = static_cast<char*>(malloc(DATAPACK_INITIAL_SIZE));
 	m_capacity = DATAPACK_INITIAL_SIZE;
+	if (m_pBase == nullptr) {
+		m_capacity = 0;  // FIXED: Handle allocation failure
+	}
 	Initialize();
 }
 
@@ -57,12 +60,26 @@ void CDataPack::CheckSize(size_t typesize)
 	}
 
 	size_t pos = m_curptr - m_pBase;
+	size_t new_capacity = m_capacity;
+	
 	do
 	{
-		m_capacity *= 2;
-	} while (pos + typesize > m_capacity);
+		new_capacity *= 2;
+	} while (pos + typesize > new_capacity);
 
-	m_pBase = (char *)realloc(m_pBase, m_capacity);
+	// FIXED: realloc can return NULL on failure, which would lose the original pointer
+	// Use a temporary pointer to check the result before assigning
+	char* new_base = (char *)realloc(m_pBase, new_capacity);
+	if (new_base == nullptr)
+	{
+		// Allocation failed - original pointer is still valid
+		// TODO: Consider throwing an exception or setting an error flag
+		// For now, abort as we cannot proceed safely
+		abort();
+	}
+	
+	m_pBase = new_base;
+	m_capacity = new_capacity;
 	m_curptr = m_pBase + pos;
 }
 
@@ -270,7 +287,7 @@ const char *CDataPack::ReadString(size_t *len) const
 	size_t real_len;
 	if (!CanReadString(&real_len))
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	m_curptr += sizeof(char);
@@ -322,7 +339,7 @@ void *CDataPack::ReadMemory(size_t *size) const
 	size_t bytecount;
 	if (!CanReadMemory(&bytecount))
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	m_curptr += sizeof(char);

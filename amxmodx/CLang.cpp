@@ -176,7 +176,7 @@ void CLangMngr::CLang::Clear()
 		if (iter->val.definition)
 		{
 			delete iter->val.definition;
-			iter->val.definition = NULL;
+			iter->val.definition = nullptr;
 		}
 	}
 	m_LookUpTable.clear();
@@ -208,7 +208,7 @@ const char * CLangMngr::CLang::GetDef(int key, int &status)
 	if (!def.definition)
 	{
 		status = ERR_BADKEY;
-		return NULL;
+		return nullptr;
 	}
 
 	status = 0;
@@ -230,7 +230,7 @@ CLangMngr::CLangMngr()
 const char * CLangMngr::GetKey(int key)
 {
 	if (key < 0 || key >= (int)KeyList.length())
-		return NULL;
+		return nullptr;
 
 	return KeyList[key]->chars();
 }
@@ -537,13 +537,13 @@ const char *CLangMngr::GetDef(const char *langName, const char *key, int &status
 	CLang *lang = GetLangR(langName);
 
 	keytbl_val &val = KeyTable.AltFindOrInsert(ke::AString(key)); //KeyTable[make_string(key)];
-	if (lang == NULL)
+	if (lang == nullptr)
 	{
 		status = ERR_BADLANG;
-		return NULL;
+		return nullptr;
 	} else if (val.index == -1) {
 		status = ERR_BADKEY;
-		return NULL;
+		return nullptr;
 	} else {
 		status = 0;
 		return lang->GetDef(val.index, status);

@@ -172,7 +172,7 @@ void CLog::Log(const char *fmt, ...)
 		vsnprintf(msg, 3071, fmt, arglst);
 		va_end(arglst);
 
-		FILE *pF = NULL;
+		FILE *pF = nullptr;
 		if (m_LogType == 2)
 		{
 			pF = fopen(m_LogFile.chars(), "a+");
@@ -242,7 +242,7 @@ void CLog::LogError(const char *fmt, ...)
 	vsnprintf(msg, sizeof(msg)-1, fmt, arglst);
 	va_end(arglst);
 
-	FILE *pF = NULL;
+	FILE *pF = nullptr;
 	ke::SafeSprintf(name, sizeof(name), "%s/error_%04d%02d%02d.log", g_log_dir.chars(), curTime->tm_year + 1900, curTime->tm_mon + 1, curTime->tm_mday);
 	build_pathname_r(file, sizeof(file), "%s", name);
 	pF = fopen(file, "a+");

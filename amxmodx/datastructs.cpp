@@ -439,7 +439,7 @@ static cell AMX_NATIVE_CALL ArrayGetStringHandle(AMX* amx, cell* params)
 
 	cell* ptr = vec->at(idx);
 
-	if (ptr == NULL)
+	if (ptr == nullptr)
 	{
 		return 0;
 	}
@@ -807,7 +807,7 @@ static cell AMX_NATIVE_CALL ArraySortEx(AMX* amx, cell* params)
 	size_t arraysize = vec->size();
 	size_t blocksize = vec->blocksize();
 	cell *array = vec->base();
-	cell amx_addr1 = 0, amx_addr2 = 0, *phys_addr = NULL;
+	cell amx_addr1 = 0, amx_addr2 = 0, *phys_addr = nullptr;
 
 	if (blocksize > 1)
 	{

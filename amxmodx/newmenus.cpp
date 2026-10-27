@@ -64,7 +64,7 @@ void validate_menu_text(char *str)
 Menu *get_menu_by_id(int id)
 {
 	if (id < 0 || size_t(id) >= g_NewMenus.length() || !g_NewMenus[id])
-		return NULL;
+		return nullptr;
 
 	return g_NewMenus[id];
 }
@@ -141,7 +141,7 @@ menuitem *Menu::AddItem(const char *name, const char *cmd, int access)
 	pItem->id = m_Items.length();
 	pItem->handler = -1;
 	pItem->isBlank = false;
-	pItem->pfn = NULL;
+	pItem->pfn = nullptr;
 
 	m_Items.append(pItem);
 
@@ -151,7 +151,7 @@ menuitem *Menu::AddItem(const char *name, const char *cmd, int access)
 menuitem *Menu::GetMenuItem(item_t item)
 {
 	if (item >= m_Items.length())
-		return NULL;
+		return nullptr;
 
 	return m_Items[item];
 }
@@ -353,7 +353,7 @@ const char *Menu::GetTextString(int player, page_t page, int &keys)
 	item_t numItems = GetItemCount();
 
 	if (page >= pages)
-		return NULL;
+		return nullptr;
 
 	m_Text = nullptr;
 
@@ -419,7 +419,7 @@ const char *Menu::GetTextString(int player, page_t page, int &keys)
 		flags &= ~Display_Back;
 	}
 
-	menuitem *pItem = NULL;
+	menuitem *pItem = nullptr;
 
 	int option = 0;
 	keys = 0;
@@ -684,7 +684,7 @@ const char *Menu::GetTextString(int player, page_t page, int &keys)
 }
 
 #define GETMENU(p) Menu *pMenu = get_menu_by_id(p); \
-	if (pMenu == NULL || pMenu->isDestroying) { \
+	if (pMenu == nullptr || pMenu->isDestroying) { \
 	LogError(amx, AMX_ERR_NATIVE, "Invalid menu id %d(%d)", p, g_NewMenus.length()); \
 	return 0; }
 
@@ -1187,7 +1187,7 @@ static cell AMX_NATIVE_CALL menu_setprop(AMX *amx, cell *params)
 }
 
 #define GETMENU_R(p) Menu *pMenu = get_menu_by_id(p); \
-	if (pMenu == NULL) { \
+	if (pMenu == nullptr) { \
 	LogError(amx, AMX_ERR_NATIVE, "Invalid menu id %d(%d)", p, g_NewMenus.length()); \
 	return 0; }
 
@@ -1236,7 +1236,7 @@ static cell AMX_NATIVE_CALL menu_destroy(AMX *amx, cell *params)
 			pMenu->Close(player->index);
 		}
 	}
-	g_NewMenus[params[1]] = NULL;
+	g_NewMenus[params[1]] = nullptr;
 	delete pMenu;
 	g_MenuFreeStack.push(params[1]);
 
@@ -1300,5 +1300,5 @@ AMX_NATIVE_INFO g_NewMenuNatives[] =
 	{"player_menu_info",		player_menu_info},
 	{"menu_addblank2",			menu_addblank2},
 	{"menu_addtext2",			menu_addtext2},
-	{NULL,						NULL},
+	{nullptr,						nullptr},
 };

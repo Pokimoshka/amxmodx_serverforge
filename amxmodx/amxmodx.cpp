@@ -478,7 +478,7 @@ static cell AMX_NATIVE_CALL show_motd(AMX *amx, cell *params) /* 3 param */
 
 	char* szBody = get_amxstring(amx, params[2], 1, ilen);
 	int iFile = 0;
-	char* sToShow = NULL; // = szBody;
+	char* sToShow = nullptr; // = szBody;
 
 	if (ilen < 128)
 		sToShow = (char*)LOAD_FILE_FOR_ME(szBody, &iFile);
@@ -582,7 +582,7 @@ static cell AMX_NATIVE_CALL show_hudmessage(AMX *amx, cell *params) /* 2 param *
 {
 	int len = 0;
 	g_langMngr.SetDefLang(params[1]);
-	char* message = NULL;
+	char* message = nullptr;
 
 	/**
 	 * Earlier versions would ignore invalid bounds.
@@ -1087,7 +1087,7 @@ static cell AMX_NATIVE_CALL get_user_origin(AMX *amx, cell *params) /* 3 param *
 			v_vec[1] = v_angle.y;
 			v_vec[2] = v_angle.z;
 
-			ANGLEVECTORS(v_vec, vec, NULL, NULL);
+			ANGLEVECTORS(v_vec, vec, nullptr, nullptr);
 			TraceResult trEnd;
 			Vector v_dest = pos + vec * 9999;
 
@@ -1138,7 +1138,7 @@ static cell AMX_NATIVE_CALL get_user_attacker(AMX *amx, cell *params) /* 2 param
 	}
 
 	CPlayer* pPlayer = GET_PLAYER_POINTER_I(index);
-	edict_t *enemy = NULL;
+	edict_t *enemy = nullptr;
 
 	if (pPlayer->ingame)
 	{
@@ -1489,7 +1489,7 @@ static cell AMX_NATIVE_CALL register_plugin(AMX *amx, cell *params) /* 5 param *
 	/* Check if we need to add fail counters */
 	i = 0;
 	unsigned int counter = 0;
-	while (NONGPL_PLUGIN_LIST[i].author != NULL)
+	while (NONGPL_PLUGIN_LIST[i].author != nullptr)
 	{
 		if (strcmp(NONGPL_PLUGIN_LIST[i].author, a->getAuthor()) == 0)
 		{
@@ -1669,7 +1669,7 @@ static cell AMX_NATIVE_CALL register_concmd(AMX *amx, cell *params)
 		FlagMan.LookupOrAdd(temp,access,amx);
 	}
 
-	if ((cmd = g_commands.registerCommand(plugin, idx, temp, info, access, listable, info_ml)) == NULL)
+	if ((cmd = g_commands.registerCommand(plugin, idx, temp, info, access, listable, info_ml)) == nullptr)
 		return 0;
 
 	if (CheckBadConList(temp, 1))
@@ -1716,7 +1716,7 @@ static cell AMX_NATIVE_CALL register_clcmd(AMX *amx, cell *params)
 		FlagMan.LookupOrAdd(temp,access,amx);
 	}
 
-	if ((cmd = g_commands.registerCommand(plugin, idx, temp, info, access, listable, info_ml)) == NULL)
+	if ((cmd = g_commands.registerCommand(plugin, idx, temp, info, access, listable, info_ml)) == nullptr)
 		return 0;
 
 	cmd->setCmdType(CMD_ClientCommand);
@@ -1752,7 +1752,7 @@ static cell AMX_NATIVE_CALL register_srvcmd(AMX *amx, cell *params)
 		listable = false;
 	}
 
-	if ((cmd = g_commands.registerCommand(plugin, idx, temp, info, access, listable, info_ml)) == NULL)
+	if ((cmd = g_commands.registerCommand(plugin, idx, temp, info, access, listable, info_ml)) == nullptr)
 		return 0;
 
 	cmd->setCmdType(CMD_ServerCommand);
@@ -1805,7 +1805,7 @@ static cell AMX_NATIVE_CALL get_concmd_plid(AMX *amx, cell *params)
 
 	CmdMngr::Command *cmd = g_commands.getCmd(params[1], who, params[2]);
 
-	if (cmd == NULL)
+	if (cmd == nullptr)
 	{
 		return -1;
 	}
@@ -2036,7 +2036,7 @@ static cell AMX_NATIVE_CALL user_slap(AMX *amx, cell *params) /* 2 param */
 				fang[0] = vang.x;
 				fang[1] = vang.y;
 				fang[2] = vang.z;
-				ANGLEVECTORS(fang, v_forward, v_right, NULL);
+				ANGLEVECTORS(fang, v_forward, v_right, nullptr);
 				pEdict->v.velocity = pEdict->v.velocity + v_forward * 220 + Vector(0, 0, 200);
 			}
 
@@ -2172,13 +2172,13 @@ static cell AMX_NATIVE_CALL log_to_file(AMX *amx, cell *params) /* 1 param */
 
 	bool first_time = true;
 
-	if ((fp = fopen(file, "r")) != NULL)
+	if ((fp = fopen(file, "r")) != nullptr)
 	{
 		first_time = false;
 		fclose(fp);
 	}
 
-	if ((fp = fopen(file, "a")) == NULL)
+	if ((fp = fopen(file, "a")) == nullptr)
 	{
 		//amx_RaiseError(amx, AMX_ERR_NATIVE);
 		//would cause too much troubles in old plugins
@@ -2233,7 +2233,7 @@ static cell AMX_NATIVE_CALL get_time(AMX *amx, cell *params) /* 3 param */
 {
 	int ilen;
 	char* sptemp = get_amxstring(amx, params[1], 0, ilen);
-	time_t td = time(NULL);
+	time_t td = time(nullptr);
 	tm* lt = localtime(&td);
 
 	char szDate[512];
@@ -2247,7 +2247,7 @@ static cell AMX_NATIVE_CALL format_time(AMX *amx, cell *params) /* 3 param */
 	int ilen;
 	char* sptemp = get_amxstring(amx, params[3], 0, ilen);
 	time_t tim = params[4];
-	time_t td = (tim != -1) ? tim : time(NULL);
+	time_t td = (tim != -1) ? tim : time(nullptr);
 	tm* lt = localtime(&td);
 
 	if (lt == 0)
@@ -2273,7 +2273,7 @@ static cell AMX_NATIVE_CALL parse_time(AMX *amx, cell *params) /* 3 param */
 
 	if (params[3] == -1)
 	{
-		td = time(NULL);
+		td = time(nullptr);
 		mytime = localtime(&td);
 
 		if (mytime == 0)
@@ -2301,7 +2301,7 @@ static cell AMX_NATIVE_CALL parse_time(AMX *amx, cell *params) /* 3 param */
 
 static cell AMX_NATIVE_CALL get_systime(AMX *amx, cell *params) /* 3 param */
 {
-	time_t td = time(NULL);
+	time_t td = time(nullptr);
 	td += params[1];
 
 	return td;
@@ -2399,10 +2399,10 @@ static cell AMX_NATIVE_CALL get_players(AMX *amx, cell *params) /* 4 param */
 			{
 				if (flags & 64)
 				{
-					if (utf8stristr(pPlayer->name.chars(), sptemp) == NULL)
+					if (utf8stristr(pPlayer->name.chars(), sptemp) == nullptr)
 						continue;
 				}
-				else if (strstr(pPlayer->name.chars(), sptemp) == NULL)
+				else if (strstr(pPlayer->name.chars(), sptemp) == nullptr)
 					continue;
 			}
 			aPlayers[iNum++] = i;
@@ -2459,10 +2459,10 @@ static cell AMX_NATIVE_CALL find_player(AMX *amx, cell *params) /* 1 param */
 			{
 				if (flags & 2048)
 				{
-					if (utf8stristr(pPlayer->name.chars(), sptemp) == NULL)
+					if (utf8stristr(pPlayer->name.chars(), sptemp) == nullptr)
 						continue;
 				}
-				else if (strstr(pPlayer->name.chars(), sptemp) == NULL)
+				else if (strstr(pPlayer->name.chars(), sptemp) == nullptr)
 					continue;
 			}
 
@@ -2666,12 +2666,12 @@ static cell AMX_NATIVE_CALL get_user_msgid(AMX *amx, cell *params) /* 1 param */
 	int ilen;
 	char* sptemp = get_amxstring(amx, params[1], 0, ilen);
 
-	return GET_USER_MSG_ID(PLID, sptemp, NULL);
+	return GET_USER_MSG_ID(PLID, sptemp, nullptr);
 }
 
 static cell AMX_NATIVE_CALL get_user_msgname(AMX *amx, cell *params) /* get_user_msgname(msg, str[], len) = 3 params */
 {
-	const char* STRING = GET_USER_MSG_NAME(PLID, params[1], NULL);
+	const char* STRING = GET_USER_MSG_NAME(PLID, params[1], nullptr);
 	if (STRING)
 		return set_amxstring(amx, params[2], STRING, params[3]);
 
@@ -2731,7 +2731,7 @@ static cell AMX_NATIVE_CALL engine_changelevel(AMX *amx, cell *params)
 
 	// Same as calling "changelevel" command but will trigger "server_changelevel" AMXX forward as well.
 	// Filling second param will call "changelevel2" command, but this is not usable in multiplayer game.
-	g_pEngTable->pfnChangeLevel(new_map.chars(), NULL);
+	g_pEngTable->pfnChangeLevel(new_map.chars(), nullptr);
 
 	return 1;
 }
@@ -3168,7 +3168,7 @@ static cell AMX_NATIVE_CALL get_user_aiming(AMX *amx, cell *params) /* 4 param *
 		Vector v_forward;
 		Vector v_src = edict->v.origin + edict->v.view_ofs;
 
-		ANGLEVECTORS(edict->v.v_angle, v_forward, NULL, NULL);
+		ANGLEVECTORS(edict->v.v_angle, v_forward, nullptr, nullptr);
 		TraceResult trEnd;
 		Vector v_dest = v_src + v_forward * static_cast<float>(params[4]);
 		TRACE_LINE(v_src, v_dest, 0, edict, &trEnd);
@@ -3504,7 +3504,7 @@ static cell AMX_NATIVE_CALL log_amx(AMX *amx, cell *params)
 
 /*********************************************************************/
 
-CPluginMngr::CPlugin *g_CallFunc_Plugin = NULL;						// The plugin
+CPluginMngr::CPlugin *g_CallFunc_Plugin = nullptr;						// The plugin
 int g_CallFunc_Func = 0;											// The func
 
 struct CallFunc_ParamInfo
@@ -3542,7 +3542,7 @@ static cell AMX_NATIVE_CALL callfunc_begin(AMX *amx, cell *params)
 	int len;
 	char *pluginStr = get_amxstring(amx, params[2], 0, len);
 	char *funcStr = get_amxstring(amx, params[1], 1, len);
-	CPluginMngr::CPlugin *plugin = NULL;
+	CPluginMngr::CPlugin *plugin = nullptr;
 
 	if (!pluginStr || !*pluginStr)
 		plugin = curPlugin;
@@ -3667,7 +3667,7 @@ static cell AMX_NATIVE_CALL callfunc_end(AMX *amx, cell *params)
 	memcpy(gparamInfo, g_CallFunc_ParamInfo, sizeof(CallFunc_ParamInfo) * curParam);
 
 	// cleanup
-	g_CallFunc_Plugin = NULL;
+	g_CallFunc_Plugin = nullptr;
 	g_CallFunc_CurParam = 0;
 
 	AMX *pAmx = plugin->getAMX();
@@ -3689,7 +3689,7 @@ static cell AMX_NATIVE_CALL callfunc_end(AMX *amx, cell *params)
 			memcpy(phys_addr, gparamInfo[i].alloc, gparamInfo[i].size * sizeof(cell));
 			gparams[i] = amx_addr;
 			delete [] gparamInfo[i].alloc;
-			gparamInfo[i].alloc = NULL;
+			gparamInfo[i].alloc = nullptr;
 		}
 	}
 
@@ -3717,7 +3717,7 @@ static cell AMX_NATIVE_CALL callfunc_end(AMX *amx, cell *params)
 		{
 			//already handled
 		} else {
-			LogError(amx, err, NULL);
+			LogError(amx, err, nullptr);
 		}
 	}
 
@@ -3806,7 +3806,7 @@ static cell AMX_NATIVE_CALL callfunc_push_byref(AMX *amx, cell *params)
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].flags = CALLFUNC_FLAG_BYREF_REUSED;
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].byrefAddr = params[1];
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].size = 1;
-			g_CallFunc_ParamInfo[g_CallFunc_CurParam].alloc = NULL;
+			g_CallFunc_ParamInfo[g_CallFunc_CurParam].alloc = nullptr;
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].copyback = true;
 			g_CallFunc_Params[g_CallFunc_CurParam++] = i;		/* referenced parameter */
 			return 0;
@@ -3856,7 +3856,7 @@ static cell AMX_NATIVE_CALL callfunc_push_array(AMX *amx, cell *params)
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].flags = CALLFUNC_FLAG_BYREF_REUSED;
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].byrefAddr = params[1];
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].size = 1;
-			g_CallFunc_ParamInfo[g_CallFunc_CurParam].alloc = NULL;
+			g_CallFunc_ParamInfo[g_CallFunc_CurParam].alloc = nullptr;
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].copyback = g_CallFunc_ParamInfo[i].copyback;
 			g_CallFunc_Params[g_CallFunc_CurParam++] = i;		/* referenced parameter */
 			return 0;
@@ -3916,7 +3916,7 @@ static cell AMX_NATIVE_CALL callfunc_push_str(AMX *amx, cell *params)
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].flags = CALLFUNC_FLAG_BYREF_REUSED;
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].byrefAddr = params[1];
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].size = 1;
-			g_CallFunc_ParamInfo[g_CallFunc_CurParam].alloc = NULL;
+			g_CallFunc_ParamInfo[g_CallFunc_CurParam].alloc = nullptr;
 			g_CallFunc_ParamInfo[g_CallFunc_CurParam].copyback = g_CallFunc_ParamInfo[i].copyback;
 			g_CallFunc_Params[g_CallFunc_CurParam++] = i;
 			// we are done
@@ -3996,7 +3996,7 @@ static cell AMX_NATIVE_CALL plugin_flags(AMX *amx, cell *params)
 	{
 		CPluginMngr::CPlugin* a = g_plugins.findPlugin((int)params[2]);
 
-		if (a == NULL)
+		if (a == nullptr)
 		{
 			return 0;
 		}
@@ -4075,7 +4075,7 @@ static cell AMX_NATIVE_CALL amx_abort(AMX *amx, cell *params)
 	char *fmt = format_amxstring(amx, params, 2, len);
 
 	if (fmt[0] == '\0')
-		fmt = NULL;
+		fmt = nullptr;
 
 	const char *filename = "";
 	CPluginMngr::CPlugin *pPlugin = g_plugins.findPluginFast(amx);
@@ -4085,12 +4085,12 @@ static cell AMX_NATIVE_CALL amx_abort(AMX *amx, cell *params)
 
 	//we were in a callfunc?
 	if (g_CallFunc_Plugin == pPlugin)
-		g_CallFunc_Plugin = NULL;
+		g_CallFunc_Plugin = nullptr;
 
 	if (fmt)
 		LogError(amx, err, "[%s] %s", filename, fmt);
 	else
-		LogError(amx, err, NULL);
+		LogError(amx, err, nullptr);
 
 	return 1;
 }
@@ -4134,7 +4134,7 @@ static cell AMX_NATIVE_CALL set_fail_state(AMX *amx, cell *params)
 	AMXXLOG_Error("[AMXX] Plugin (\"%s\") is setting itself as failed.", pPlugin->getName());
 	AMXXLOG_Error("[AMXX] Plugin says: %s", str);
 
-	LogError(amx, AMX_ERR_EXIT, NULL);
+	LogError(amx, AMX_ERR_EXIT, nullptr);
 
 	//plugin dies once amx_Exec concludes
 	return 0;
@@ -4265,7 +4265,7 @@ static cell AMX_NATIVE_CALL ExecuteForward(AMX *amx, cell *params)
 			cell num = len / sizeof(cell) + 1;
 			if ((err=amx_Allot(amx, num, &allots[i-3].amx_addr, &allots[i-3].phys_addr)) != AMX_ERR_NONE)
 			{
-				LogError(amx, err, NULL);
+				LogError(amx, err, nullptr);
 				return 0;
 			}
 			strcpy((char *)allots[i-3].phys_addr, tmp);
@@ -4397,7 +4397,7 @@ static cell AMX_NATIVE_CALL ClearSyncHud(AMX *amx, cell *params)
 static cell AMX_NATIVE_CALL ShowSyncHudMsg(AMX *amx, cell *params)
 {
 	int len = 0;
-	char* message = NULL;
+	char* message = nullptr;
 	int index = params[1];
 	unsigned int sync_obj = static_cast<unsigned int>(params[2]) - 1;
 
@@ -4613,7 +4613,7 @@ static cell AMX_NATIVE_CALL LookupLangKey(AMX *amx, cell *params)
 	char *key=get_amxstring(amx,params[3],0,len);
 	const char *def=translate(amx, playerlang(*get_amxaddr(amx, params[4])),key);
 
-	if (def==NULL)
+	if (def==nullptr)
 	{
 		return 0;
 	}
@@ -4636,7 +4636,7 @@ static cell AMX_NATIVE_CALL has_map_ent_class(AMX *amx, cell *params)
 	int len;
 	char *name = get_amxstring(amx, params[1], 0, len);
 
-	return len && !FNullEnt(FIND_ENTITY_BY_STRING(NULL, "classname", name));
+	return len && !FNullEnt(FIND_ENTITY_BY_STRING(nullptr, "classname", name));
 };
 
 static cell AMX_NATIVE_CALL AutoExecConfig(AMX *amx, cell *params)
@@ -4884,5 +4884,5 @@ AMX_NATIVE_INFO amxmodx_Natives[] =
 	{"ShowSyncHudMsg",			ShowSyncHudMsg},
 	{"AutoExecConfig",			AutoExecConfig},
 	{"RequestFrame",			RequestFrame},
-	{NULL,						NULL}
+	{nullptr,						nullptr}
 };

@@ -41,14 +41,14 @@ static int unused_callback(AMX *, cell, cell *, cell *)
 }
 
 static int run_program(const cell *instructions, size_t instruction_count, cell *result,
-                       cell stack_offset = -1, const cell *initial_data = NULL,
+                       cell stack_offset = -1, const cell *initial_data = nullptr,
                        cell frame_offset = 0)
 {
 	const size_t code_offset = sizeof(AMX_HEADER);
 	const size_t code_size = instruction_count * sizeof(cell);
 	std::vector<unsigned char> image(code_offset + code_size);
 	std::vector<cell> data(64, 0);
-	if (initial_data != NULL)
+	if (initial_data != nullptr)
 		memcpy(data.data(), initial_data, data.size() * sizeof(cell));
 	AMX_HEADER *header = reinterpret_cast<AMX_HEADER *>(image.data());
 	memset(header, 0, sizeof(*header));

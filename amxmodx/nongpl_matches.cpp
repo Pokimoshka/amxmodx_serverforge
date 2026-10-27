@@ -14,7 +14,7 @@ NONGPL_PLUGIN_T NONGPL_PLUGIN_LIST[] =
 {
 	{"Live", "CZ Gun Game", "czgungame.amxx"},
 	{"Live", "AMXX Gun Game", "czgungame.amxx"},
-	{NULL, NULL, NULL},
+	{nullptr, nullptr, nullptr},
 };
 
 NONGPL_CVAR_T NONGPL_CVAR_LIST[] = 
@@ -28,13 +28,13 @@ NONGPL_CVAR_T NONGPL_CVAR_LIST[] =
 	{"gg_turbo", 0},
 	{"amx_ggreset", 1},
 	{"amx_gg", 1},
-	{NULL, 0},
+	{nullptr, 0},
 };
 
 bool CheckBadConList(const char *cvar, int type)
 {
 	int i = 0;
-	while (NONGPL_CVAR_LIST[i].cvar != NULL)
+	while (NONGPL_CVAR_LIST[i].cvar != nullptr)
 	{
 		if (NONGPL_CVAR_LIST[i].type == type
 			&& strcmp(NONGPL_CVAR_LIST[i].cvar, cvar) == 0)

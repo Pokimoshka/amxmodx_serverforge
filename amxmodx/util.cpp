@@ -55,7 +55,7 @@ void UTIL_ShowMenu(edict_t* pEdict, int slots, int time, char *menu, int mlen)
 		c = *(n+=a);
 		*n = 0;
 		
-		MESSAGE_BEGIN(MSG_ONE, gmsgShowMenu, NULL, pEdict);
+		MESSAGE_BEGIN(MSG_ONE, gmsgShowMenu, nullptr, pEdict);
 		WRITE_SHORT(slots);
 		WRITE_CHAR(time);
 		WRITE_BYTE(c ? TRUE : FALSE);
@@ -75,7 +75,7 @@ void UTIL_ShowMOTD(edict_t *client, char *motd, int mlen, const char *name)
 
 	if (gmsgServerName)
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgServerName, NULL, client);
+		MESSAGE_BEGIN(MSG_ONE, gmsgServerName, nullptr, client);
 		WRITE_STRING(name);
 		MESSAGE_END();
 	}
@@ -92,7 +92,7 @@ void UTIL_ShowMOTD(edict_t *client, char *motd, int mlen, const char *name)
 		c = *(n += a);
 		*n = 0;
 		
-		MESSAGE_BEGIN(MSG_ONE, gmsgMOTD, NULL, client);
+		MESSAGE_BEGIN(MSG_ONE, gmsgMOTD, nullptr, client);
 		WRITE_BYTE(c ? FALSE : TRUE);
 		WRITE_STRING(motd);
 		MESSAGE_END();
@@ -102,7 +102,7 @@ void UTIL_ShowMOTD(edict_t *client, char *motd, int mlen, const char *name)
 
 	if (gmsgServerName)
 	{
-		MESSAGE_BEGIN(MSG_ONE, gmsgServerName, NULL, client);
+		MESSAGE_BEGIN(MSG_ONE, gmsgServerName, nullptr, client);
 		WRITE_STRING(hostname->string);
 		MESSAGE_END();
 	}
@@ -219,7 +219,7 @@ short FixedSigned16(float value, float scale)
 void UTIL_HudMessage(edict_t *pEntity, const hudtextparms_t &textparms, const char *pMessage)
 {
 	if (pEntity)
-		MESSAGE_BEGIN(MSG_ONE_UNRELIABLE, SVC_TEMPENTITY, NULL, pEntity);
+		MESSAGE_BEGIN(MSG_ONE_UNRELIABLE, SVC_TEMPENTITY, nullptr, pEntity);
 	else
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 
@@ -252,7 +252,7 @@ void UTIL_DHudMessage(edict_t *pEntity, const hudtextparms_t &textparms, const c
 	#define DRC_CMD_MESSAGE 6
 
 	if (pEntity)
-		MESSAGE_BEGIN(MSG_ONE_UNRELIABLE, SVC_DIRECTOR, NULL, pEntity);
+		MESSAGE_BEGIN(MSG_ONE_UNRELIABLE, SVC_DIRECTOR, nullptr, pEntity);
 	else
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_DIRECTOR);
 
@@ -285,7 +285,7 @@ void UTIL_ClientPrint(edict_t *pEntity, int msg_dest, char *msg)
 	msg[index] = 0;			// truncate without checking with strlen()
 	
 	if (pEntity)
-		MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, NULL, pEntity);
+		MESSAGE_BEGIN(MSG_ONE, gmsgTextMsg, nullptr, pEntity);
 	else
 		MESSAGE_BEGIN(MSG_BROADCAST, gmsgTextMsg);
 	
@@ -311,7 +311,7 @@ void UTIL_ClientSayText(edict_t *pEntity, int sender, char *msg)
 	char c = msg[index];
 	msg[index] = 0;			// truncate without checking with strlen()
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, NULL, pEntity);
+	MESSAGE_BEGIN(MSG_ONE, gmsgSayText, nullptr, pEntity);
 	WRITE_BYTE(sender);		// 1 byte
 	if (canUseFormatString) 
 		WRITE_STRING("%s");	// 3 bytes (2 + EOS)
@@ -325,7 +325,7 @@ void UTIL_TeamInfo(edict_t *pEntity, int playerIndex, const char *pszTeamName)
 	if (!gmsgTeamInfo)
 		return;
 
-	MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, NULL, pEntity);
+	MESSAGE_BEGIN(MSG_ONE, gmsgTeamInfo, nullptr, pEntity);
 	WRITE_BYTE(playerIndex);
 	WRITE_STRING(pszTeamName);
 	MESSAGE_END();
@@ -349,7 +349,7 @@ void UTIL_FakeClientCommand(edict_t *pEdict, const char *cmd, const char *arg1, 
 	if (!arg1 && arg2)
 	{
 		arg1 = arg2;
-		arg2 = NULL;
+		arg2 = nullptr;
 	}
 
 	// store arguments
@@ -513,7 +513,7 @@ size_t UTIL_ReplaceAll(char *subject, size_t maxlength, const char *search, size
 {
 	char *newptr, *ptr = subject;
 	unsigned int total = 0;
-	while ((newptr = UTIL_ReplaceEx(ptr, maxlength, search, searchLen, replace, replaceLen, caseSensitive)) != NULL)
+	while ((newptr = UTIL_ReplaceEx(ptr, maxlength, search, searchLen, replace, replaceLen, caseSensitive)) != nullptr)
 	{
 		total++;
 		maxlength -= newptr - ptr;
@@ -580,7 +580,7 @@ char *UTIL_ReplaceEx(char *subject, size_t maxLen, const char *search, size_t se
 	/* It's not possible to search or replace */
 	if (searchLen > textLen)
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	/* Handle the case of one byte replacement.
@@ -598,7 +598,7 @@ char *UTIL_ReplaceEx(char *subject, size_t maxLen, const char *search, size_t se
 		}
 		else
 		{
-			return NULL;
+			return nullptr;
 		}
 	}
 
@@ -732,7 +732,7 @@ char *UTIL_ReplaceEx(char *subject, size_t maxLen, const char *search, size_t se
 		browsed++;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // From Metamod:Source

@@ -47,7 +47,7 @@ void CTaskMngr::CTask::set(CPluginMngr::CPlugin *pPlugin, int iFunc, int iFlags,
 		m_pParams[iParamsLen] = 0;
 	} else {
 		m_iParamLen = 0;
-		m_pParams = NULL;
+		m_pParams = nullptr;
 	}
 }
 
@@ -64,10 +64,10 @@ void CTaskMngr::CTask::clear()
 	if (m_pParams)
 	{
 		delete [] m_pParams;
-		m_pParams = NULL;
+		m_pParams = nullptr;
 	}
 
-	m_pPlugin = NULL;
+	m_pPlugin = nullptr;
 	m_iId = 0;
 	m_fBase = 0.0f;
 
@@ -157,7 +157,7 @@ CTaskMngr::CTask::CTask()
 {
 	m_bFree = true;
 
-	m_pPlugin = NULL;
+	m_pPlugin = nullptr;
 	m_iFunc = -1;
 	m_iId = 0;
 	m_fBase = 0.0f;
@@ -171,7 +171,7 @@ CTaskMngr::CTask::CTask()
 	m_fNextExecTime = 0.0f;
 
 	m_iParamLen = 0;
-	m_pParams = NULL;
+	m_pParams = nullptr;
 }
 
 CTaskMngr::CTask::~CTask()
@@ -183,9 +183,9 @@ CTaskMngr::CTask::~CTask()
 
 CTaskMngr::CTaskMngr()
 {
-	m_pTmr_CurrentTime = NULL;
-	m_pTmr_TimeLimit = NULL;
-	m_pTmr_TimeLeft = NULL;
+	m_pTmr_CurrentTime = nullptr;
+	m_pTmr_TimeLimit = nullptr;
+	m_pTmr_TimeLeft = nullptr;
 }
 
 CTaskMngr::~CTaskMngr()

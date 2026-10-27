@@ -138,7 +138,7 @@ void BinLog::WriteOp(BinLogOp op, int plug, ...)
 	}
 
 	unsigned char c = static_cast<char>(op);
-	time_t t = time(NULL);
+	time_t t = time(nullptr);
 	float gt = gpGlobals->time;
 	fwrite(&c, sizeof(char), 1, fp);
 	fwrite(&t, sizeof(time_t), 1, fp);
@@ -148,10 +148,10 @@ void BinLog::WriteOp(BinLogOp op, int plug, ...)
 	va_list ap;
 	va_start(ap, plug);
 
-	AMX *amx = NULL;
+	AMX *amx = nullptr;
 	bool debug = false;
-	AMX_DBG *dbg = NULL;
-	CPluginMngr::CPlugin *pl = NULL;
+	AMX_DBG *dbg = nullptr;
+	CPluginMngr::CPlugin *pl = nullptr;
 
 	if (plug != -1)
 	{
@@ -309,7 +309,7 @@ void BinLog::WritePluginDB(FILE *fp)
 		fwrite(&c, sizeof(char), 1, fp);
 		if (c)
 		{
-			Debugger *pd = NULL;
+			Debugger *pd = nullptr;
 			len = (char)strlen(pl->getName());
 			fwrite(&len, sizeof(char), 1, fp);
 			len++;

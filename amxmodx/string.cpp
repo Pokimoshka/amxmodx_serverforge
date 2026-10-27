@@ -32,7 +32,7 @@ const char* stristr(const char* str, const char* substr)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 char* format_amxstring(AMX *amx, cell *params, int parm, int& len)
@@ -459,7 +459,7 @@ static cell AMX_NATIVE_CALL amx_strtol(AMX *amx, cell *params) /* 3 param */
 	char *pString = get_amxstring(amx, params[1], 0, len);
 	cell *endPos = get_amxaddr(amx, params[2]);
 
-	char *pEnd = NULL;
+	char *pEnd = nullptr;
 	long result = strtol(pString, &pEnd, base);
 
 	*endPos = pEnd - pString;
@@ -473,7 +473,7 @@ static cell AMX_NATIVE_CALL amx_strtof(AMX *amx, cell *params) /* 2 param */
 	char *pString = get_amxstring(amx, params[1], 0, len);
 	cell *endPos = get_amxaddr(amx, params[2]);
 
-	char *pEnd = NULL;
+	char *pEnd = nullptr;
 	float result = strtod(pString, &pEnd);
 
 	*endPos = pEnd - pString;
@@ -1721,5 +1721,5 @@ AMX_NATIVE_INFO string_Natives[] =
 	{"str_to_float",	str_to_float},
 	{"float_to_str",	float_to_str},
 	{"vformat",			vformat},
-	{NULL,				NULL}
+	{nullptr,				nullptr}
 };

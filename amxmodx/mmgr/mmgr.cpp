@@ -208,7 +208,7 @@ static	const	char		*sourceFile            = "??";
 static	const	char		*sourceFunc            = "??";
 static		unsigned int	sourceLine             = 0;
 static		bool		staticDeinitTime       = false;
-static		sAllocUnit	**reservoirBuffer      = NULL;
+static		sAllocUnit	**reservoirBuffer      = nullptr;
 static		unsigned int	reservoirBufferSize    = 0;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -288,7 +288,7 @@ static	const char	*memorySizeString(unsigned long size)
 static	sAllocUnit	*findAllocUnit(const void *reportedAddress)
 {
 	// Just in case...
-	m_assert(reportedAddress != NULL);
+	m_assert(reportedAddress != nullptr);
 
 	// Use the address to locate the hash index. Note that we shift off the lower four bits. This is because most allocated
 	// addresses will be on four-, eight- or even sixteen-byte boundaries. If we didn't do this, the hash index would not have
@@ -302,7 +302,7 @@ static	sAllocUnit	*findAllocUnit(const void *reportedAddress)
 		ptr = ptr->next;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -333,7 +333,7 @@ static	void	*calculateReportedAddress(const void *actualAddress)
 {
 	// We allow this...
 
-	if (!actualAddress) return NULL;
+	if (!actualAddress) return nullptr;
 
 	// JUst account for the padding
 
@@ -484,7 +484,7 @@ static	void	dumpLeakReport()
 
 	static  char    timeString[25];
 	memset(timeString, 0, sizeof(timeString));
-	time_t  t = time(NULL);
+	time_t  t = time(nullptr);
 	struct  tm *tme = localtime(&t);
 	fprintf(fp, " ---------------------------------------------------------------------------------------------------------------------------------- \r\n");
 	fprintf(fp, "|                                          Memory leak report for:  %02d/%02d/%04d %02d:%02d:%02d                                            |\r\n", tme->tm_mon + 1, tme->tm_mday, tme->tm_year + 1900, tme->tm_hour, tme->tm_min, tme->tm_sec);
@@ -510,7 +510,7 @@ static	void	dumpLeakReport()
 			free(reservoirBuffer);
 			reservoirBuffer = 0;
 			reservoirBufferSize = 0;
-			reservoir = NULL;
+			reservoir = nullptr;
 		}
 	}
 	fprintf(fp, "\r\n");
@@ -582,7 +582,7 @@ bool	&m_breakOnRealloc(void *reportedAddress)
 
 	// If you hit this assert, you tried to set a breakpoint on reallocation for an address that doesn't exist. Interrogate the
 	// stack frame or the variable 'au' to see which allocation this is.
-	m_assert(au != NULL);
+	m_assert(au != nullptr);
 
 	// If you hit this assert, you tried to set a breakpoint on reallocation for an address that wasn't allocated in a way that
 	// is compatible with reallocation.
@@ -606,7 +606,7 @@ bool	&m_breakOnDealloc(void *reportedAddress)
 
 	// If you hit this assert, you tried to set a breakpoint on deallocation for an address that doesn't exist. Interrogate the
 	// stack frame or the variable 'au' to see which allocation this is.
-	m_assert(au != NULL);
+	m_assert(au != nullptr);
 
 	return au->breakOnDealloc;
 }
@@ -926,11 +926,11 @@ void	*m_allocator(const char *sourceFile, const unsigned int sourceLine, const c
 
 			// If you hit this assert, then the memory manager failed to allocate internal memory for tracking the
 			// allocations
-			m_assert(reservoir != NULL);
+			m_assert(reservoir != nullptr);
 
 			// Danger Will Robinson!
 
-			if (reservoir == NULL) 
+			if (reservoir == nullptr) 
 			{
 				log("%s: Unable to allocate RAM for internal memory tracking data", ownerString(sourceFile, sourceLine, sourceFunc));
 				throw "Unable to allocate RAM for internal memory tracking data";
@@ -956,7 +956,7 @@ void	*m_allocator(const char *sourceFile, const unsigned int sourceLine, const c
 		}
 
 		// Logical flow says this should never happen...
-		m_assert(reservoir != NULL);
+		m_assert(reservoir != nullptr);
 
 		// Grab a new allocaton unit from the front of the reservoir
 
@@ -977,7 +977,7 @@ void	*m_allocator(const char *sourceFile, const unsigned int sourceLine, const c
 		else
 		{
 			log("!Random faiure!");
-			au->actualAddress = NULL;
+			au->actualAddress = nullptr;
 		}
 		#else
 		au->actualAddress     = malloc(au->actualSize);
@@ -997,10 +997,10 @@ void	*m_allocator(const char *sourceFile, const unsigned int sourceLine, const c
 		#ifndef RANDOM_FAILURE
 		// If you hit this assert, then the requested allocation simply failed (you're out of memory.) Interrogate the
 		// variable 'au' or the stack frame to see what you were trying to do.
-		m_assert(au->actualAddress != NULL);
+		m_assert(au->actualAddress != nullptr);
 		#endif
 
-		if (au->actualAddress == NULL)
+		if (au->actualAddress == nullptr)
 		{
 			log("%s: Request for allocation failed. Out of memory.", ownerString(sourceFile, sourceLine, sourceFunc));
 			throw "Request for allocation failed. Out of memory.";
@@ -1015,7 +1015,7 @@ void	*m_allocator(const char *sourceFile, const unsigned int sourceLine, const c
 		unsigned int	hashIndex = ((unsigned int) au->reportedAddress >> 4) & (hashSize - 1);
 		if (hashTable[hashIndex]) hashTable[hashIndex]->prev = au;
 		au->next = hashTable[hashIndex];
-		au->prev = NULL;
+		au->prev = nullptr;
 		hashTable[hashIndex] = au;
 
 		// Account for the new allocatin unit in our stats
@@ -1073,7 +1073,7 @@ void	*m_allocator(const char *sourceFile, const unsigned int sourceLine, const c
 		log("EXIT : m_allocator()");
 		#endif
 
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -1112,8 +1112,8 @@ void	*m_reallocator(const char *sourceFile, const unsigned int sourceLine, const
 		sAllocUnit	*au = findAllocUnit(reportedAddress);
 
 		// If you hit this assert, you tried to reallocate RAM that wasn't allocated by this memory manager.
-		m_assert(au != NULL);
-		if (au == NULL)
+		m_assert(au != nullptr);
+		if (au == nullptr)
 		{
 			log("%s: Request to reallocate RAM that was never allocated", ownerString(sourceFile, sourceLine, sourceFunc));
 			throw "Request to reallocate RAM that was never allocated";
@@ -1146,7 +1146,7 @@ void	*m_reallocator(const char *sourceFile, const unsigned int sourceLine, const
 
 		void	*oldReportedAddress = reportedAddress;
 		size_t	newActualSize = calculateActualSize(reportedSize);
-		void	*newActualAddress = NULL;
+		void	*newActualAddress = nullptr;
 		#ifdef RANDOM_FAILURE
 		double	a = rand();
 		double	b = RAND_MAX / 100.0 * RANDOM_FAILURE;
@@ -1221,7 +1221,7 @@ void	*m_reallocator(const char *sourceFile, const unsigned int sourceLine, const
 			hashIndex = ((unsigned int) au->reportedAddress >> 4) & (hashSize - 1);
 			if (hashTable[hashIndex]) hashTable[hashIndex]->prev = au;
 			au->next = hashTable[hashIndex];
-			au->prev = NULL;
+			au->prev = nullptr;
 			hashTable[hashIndex] = au;
 		}
 
@@ -1278,7 +1278,7 @@ void	*m_reallocator(const char *sourceFile, const unsigned int sourceLine, const
 		log("EXIT : m_reallocator()");
 		#endif
 
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -1303,8 +1303,8 @@ void	m_deallocator(const char *sourceFile, const unsigned int sourceLine, const 
 		sAllocUnit	*au = findAllocUnit(reportedAddress);
 
 		// If you hit this assert, you tried to deallocate RAM that wasn't allocated by this memory manager.
-		m_assert(au != NULL);
-		if (au == NULL)
+		m_assert(au != nullptr);
+		if (au == nullptr)
 		{
 			log("%s: Request to deallocate RAM that was never allocated", ownerString(sourceFile, sourceLine, sourceFunc));
 			throw "Request to deallocate RAM that was never allocated";
@@ -1400,7 +1400,7 @@ bool	m_validateAddress(const void *reportedAddress)
 {
 	// Just see if the address exists in our allocation routines
 
-	return findAllocUnit(reportedAddress) != NULL;
+	return findAllocUnit(reportedAddress) != nullptr;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -1549,7 +1549,7 @@ void	m_dumpMemoryReport(const char *filename, const bool overwrite)
 {
 	// Open the report file
 
-	FILE	*fp = NULL;
+	FILE	*fp = nullptr;
 	
 	if (overwrite)	fp = fopen(filename, "w+b");
 	else		fp = fopen(filename, "ab");
@@ -1563,7 +1563,7 @@ void	m_dumpMemoryReport(const char *filename, const bool overwrite)
 
         static  char    timeString[25];
         memset(timeString, 0, sizeof(timeString));
-        time_t  t = time(NULL);
+        time_t  t = time(nullptr);
         struct  tm *tme = localtime(&t);
 	fprintf(fp, " ---------------------------------------------------------------------------------------------------------------------------------- \r\n");
         fprintf(fp, "|                                             Memory report for: %02d/%02d/%04d %02d:%02d:%02d                                               |\r\n", tme->tm_mon + 1, tme->tm_mday, tme->tm_year + 1900, tme->tm_hour, tme->tm_min, tme->tm_sec);

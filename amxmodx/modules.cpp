@@ -36,7 +36,7 @@
 ke::InlineList<CModule> g_modules;
 ke::InlineList<CScript> g_loadedscripts;
 
-CModule *g_CurrentlyCalledModule = NULL;	// The module we are in at the moment; NULL otherwise
+CModule *g_CurrentlyCalledModule = nullptr;	// The module we are in at the moment; nullptr otherwise
 
 // also NULL for non-amxx modules
 // This is needed so we know which module called a function
@@ -185,7 +185,7 @@ int load_amxscript_internal(AMX *amx, void **program, const char *filename, char
 	int err;
 	memset(amx, 0, sizeof(*amx));
 	bool will_be_debugged = false;
-	tagAMX_DBG *pDbg = NULL;
+	tagAMX_DBG *pDbg = nullptr;
 
 	if ((int)amxmodx_debug->value == 2 || debug)
 	{
@@ -288,7 +288,7 @@ int load_amxscript_internal(AMX *amx, void **program, const char *filename, char
 		{
 			//amx->base = (unsigned char FAR *)realloc(np, amx->code_size);
 #if defined(_WIN32)
-			amx->base = (unsigned char *)VirtualAlloc(NULL, amx->code_size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+			amx->base = (unsigned char *)VirtualAlloc(nullptr, amx->code_size, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
 #elif defined(__GNUC__)
 # if defined(__APPLE__)
 			amx->base = (unsigned char *)valloc(amx->code_size);
@@ -1264,7 +1264,7 @@ int MNF_IsPlayerValid(int id)
 const char * MNF_GetPlayerName(int id)
 {
 	if (id < 1 || id > gpGlobals->maxClients)
-		return NULL;
+		return nullptr;
 
 	return GET_PLAYER_POINTER_I(id)->name.chars();
 }
@@ -1289,7 +1289,7 @@ void MNF_OverrideNatives(AMX_NATIVE_INFO *natives, const char *name)
 const char * MNF_GetPlayerIP(int id)
 {
 	if (id < 1 || id > gpGlobals->maxClients)
-		return NULL;
+		return nullptr;
 
 	return GET_PLAYER_POINTER_I(id)->ip.chars();
 }
@@ -1458,7 +1458,7 @@ extern "C" void LogError(AMX *amx, int err, const char *fmt, ...)
 
 	msg_buffer[0] = '\0';
 
-	if (fmt != NULL)
+	if (fmt != nullptr)
 	{
 		va_list ap;
 		va_start(ap, fmt);
@@ -1488,7 +1488,7 @@ extern "C" void LogError(AMX *amx, int err, const char *fmt, ...)
 		{
 			if (pHandler->IsHandling())
 			{
-				if (fmt != NULL)
+				if (fmt != nullptr)
 				{
 					pHandler->SetErrorMsg(msg_buffer);
 				}
@@ -1497,7 +1497,7 @@ extern "C" void LogError(AMX *amx, int err, const char *fmt, ...)
 			}
 
 			//give the user a first-chance at blocking the error from displaying
-			if (pHandler->HandleError(fmt ? msg_buffer : NULL) != 0)
+			if (pHandler->HandleError(fmt ? msg_buffer : nullptr) != 0)
 			{
 				amx->error = -1;
 				return;
@@ -1521,7 +1521,7 @@ extern "C" void LogError(AMX *amx, int err, const char *fmt, ...)
 	} else {
 		pDebugger->SetTracedError(err);
 		//we can display error now
-		pDebugger->DisplayTrace(fmt ? msg_buffer : NULL);
+		pDebugger->DisplayTrace(fmt ? msg_buffer : nullptr);
 	}
 
 	amx->error = -1;
@@ -1550,7 +1550,7 @@ size_t MNF_RemoveLibraries(void *parent)
 edict_t* MNF_GetPlayerEdict(int id)
 {
 	if (id < 1 || id > gpGlobals->maxClients)
-		return NULL;
+		return nullptr;
 
 	return (GET_PLAYER_POINTER_I(id)->pEdict);
 }
@@ -1563,7 +1563,7 @@ const char *MNF_Format(const char *fmt, ...)
 const char *MNF_GetPlayerTeam(int id)
 {
 	if (id < 1 || id > gpGlobals->maxClients)
-		return NULL;
+		return nullptr;
 
 	return (GET_PLAYER_POINTER_I(id)->team.chars());
 }
@@ -1599,7 +1599,7 @@ cell MNF_PrepareCharArray(char *ptr, unsigned int size)
 ke::Vector<ke::AutoPtr<func_s>> g_functions;
 
 // Fnptr Request function for the new interface
-const char *g_LastRequestedFunc = NULL;
+const char *g_LastRequestedFunc = nullptr;
 #define REGISTER_FUNC(name, func) \
 	{ \
 		auto pFunc = ke::AutoPtr<func_s>(new func_s); \
@@ -1646,7 +1646,7 @@ int MNF_SetPlayerTeamInfo(int player, int teamid, const char *teamname)
 		return 0;
 
 	pPlayer->teamId = teamid;
-	if (teamname != NULL)
+	if (teamname != nullptr)
 	{
 		pPlayer->team = teamname;
 
@@ -1669,7 +1669,7 @@ void MNF_MessageBlock(int mode, int msg, int *opt)
 	{
 	case MSGBLOCK_SET:
 		{
-			if (msg < 0 || msg > MAX_MESSAGES || opt == NULL)
+			if (msg < 0 || msg > MAX_MESSAGES || opt == nullptr)
 			{
 				return;
 			}
@@ -1680,7 +1680,7 @@ void MNF_MessageBlock(int mode, int msg, int *opt)
 		}
 	case MSGBLOCK_GET:
 		{
-			if (msg < 0 || msg > MAX_MESSAGES || opt == NULL)
+			if (msg < 0 || msg > MAX_MESSAGES || opt == nullptr)
 			{
 				return;
 			}
@@ -1693,7 +1693,7 @@ void MNF_MessageBlock(int mode, int msg, int *opt)
 void *MNF_PlayerPropAddr(int id, int prop)
 {
 	if (id < 1 || id > gpGlobals->maxClients)
-		return NULL;
+		return nullptr;
 
 	CPlayer *pPlayer = GET_PLAYER_POINTER_I(id);
 
@@ -1738,10 +1738,10 @@ void *MNF_PlayerPropAddr(int id, int prop)
 	case Player_NewmenuPage:
 		return &pPlayer->page;
 	default:
-		return NULL;
+		return nullptr;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 int amx_Execv()
@@ -1879,9 +1879,9 @@ Debugger *DisableDebugHandler(AMX *amx)
 {
 	Debugger *pd = static_cast<Debugger *>(amx->userdata[UD_DEBUGGER]);
 
-	amx->userdata[UD_DEBUGGER] = NULL;
+	amx->userdata[UD_DEBUGGER] = nullptr;
 	amx->flags &= ~(AMX_FLAG_DEBUG);
-	amx_SetDebugHook(amx, NULL);
+	amx_SetDebugHook(amx, nullptr);
 
 	return pd;
 }

@@ -27,7 +27,7 @@ public:
 		
 		struct trace_info
 		{
-			trace_info() : cip(0), frm(0), next(NULL), prev(NULL), used(false) {};
+			trace_info() : cip(0), frm(0), next(nullptr), prev(nullptr), used(false) {};
 			
 			cell cip;
 			cell frm;
@@ -39,7 +39,7 @@ public:
 		};
 	
 	public:
-		Tracer() : m_Error(0), m_pStart(NULL), m_pEnd(NULL), m_Reset(true) {};
+		Tracer() : m_Error(0), m_pStart(nullptr), m_pEnd(nullptr), m_Reset(true) {};
 		~Tracer();
 	public:
 		void StepI(cell frm, cell cip);

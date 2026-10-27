@@ -13,7 +13,7 @@ extern "C" void *__wrap_realloc(void *ptr, size_t size)
 	if (g_failNextRealloc)
 	{
 		g_failNextRealloc = false;
-		return NULL;
+		return nullptr;
 	}
 
 	return __real_realloc(ptr, size);
@@ -39,7 +39,7 @@ int main()
 
 	CellArray array(1, 1);
 	cell *item = array.push();
-	CHECK(item != NULL);
+	CHECK(item != nullptr);
 	*item = 42;
 
 	size_t oldSize = array.size();
@@ -59,7 +59,7 @@ int main()
 	CHECK(array.at(0)[0] == 42);
 
 	CellArray oversizedArray(static_cast<size_t>(-1), 1);
-	CHECK(oversizedArray.push() == NULL);
+	CHECK(oversizedArray.push() == nullptr);
 	CHECK(oversizedArray.size() == 0);
 
 	return 0;

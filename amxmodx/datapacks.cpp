@@ -134,7 +134,7 @@ static cell AMX_NATIVE_CALL ReadPackString(AMX* amx, cell* params)
 		return 0;
 	}
 
-	if (!d->CanReadString(NULL))
+	if (!d->CanReadString(nullptr))
 	{
 		LogError(amx, AMX_ERR_NATIVE, "Datapack operation is invalid.");
 		return 0;

@@ -77,7 +77,7 @@ int sort_ints_desc(const void *int1, const void *int2)
 
 void sort_random(cell *array, cell size)
 {
-	srand((unsigned int)time(NULL));
+	srand((unsigned int)time(nullptr));
 
 	for (int i = size-1; i > 0; i--)
 	{
@@ -166,8 +166,8 @@ static cell AMX_NATIVE_CALL SortFloats(AMX *amx, cell *params)
 	return 1;
 }
 
-static cell *g_CurStringArray = NULL;
-static cell *g_CurRebaseMap = NULL;
+static cell *g_CurStringArray = nullptr;
+static cell *g_CurRebaseMap = nullptr;
 
 int sort_strings_asc(const void *blk1, const void *blk2)
 {
@@ -257,8 +257,8 @@ static cell AMX_NATIVE_CALL SortStrings(AMX *amx, cell *params)
 
 	amx_Release(amx, amx_addr);
 
-	g_CurStringArray = NULL;
-	g_CurRebaseMap = NULL;
+	g_CurStringArray = nullptr;
+	g_CurRebaseMap = nullptr;
 
 	return 1;
 }
@@ -305,8 +305,8 @@ static cell AMX_NATIVE_CALL SortCustom1D(AMX *amx, cell *params)
 	pInfo->data_addr = params[4];
 	pInfo->data_size = params[5];
 	pInfo->array_addr = params[1];
-	pInfo->array_remap = NULL;
-	pInfo->array_base = NULL;
+	pInfo->array_remap = nullptr;
+	pInfo->array_base = nullptr;
 
 	g_AMXSortStack.push(pInfo);
 	qsort(array, array_size, sizeof(cell), sort1d_amx_custom);
@@ -429,7 +429,7 @@ void sort_adt_random(CellArray *cArray)
 {
 	size_t arraysize = cArray->size();
 
-	srand((unsigned int)time(NULL));
+	srand((unsigned int)time(nullptr));
 
 	for (int i = arraysize-1; i > 0; i--)
 	{
@@ -510,5 +510,5 @@ AMX_NATIVE_INFO g_SortNatives[] =
 	{"SortCustom2D",			SortCustom2D},
 	{"SortADTArray",			SortADTArray},
 
-	{NULL,						NULL},
+	{nullptr,						nullptr},
 };

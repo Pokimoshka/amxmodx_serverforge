@@ -229,7 +229,7 @@ typedef struct tagFUNCSTUBNT {
  */
 typedef struct tagAMX {
   unsigned char _FAR *base PACKED; /* points to the AMX header plus the code, optionally also the data */
-  unsigned char _FAR *data PACKED; /* points to separate data+stack+heap, may be NULL */
+  unsigned char _FAR *data PACKED; /* points to separate data+stack+heap, may be nullptr */
   AMX_CALLBACK callback PACKED;
   AMX_DEBUG debug       PACKED; /* debug callback */
   /* for external functions a few registers must be accessible from the outside */
@@ -356,15 +356,27 @@ typedef void (*BROWSEHOOK)(AMX *amx, cell *oplist, cell *cip);
 /* for native functions that use floating point parameters, the following
  * two macros are convenient for casting a "cell" into a "float" type _without_
  * changing the bit pattern
+ * 
+ * NOTE: These macros now use type-safe bit_cast implementation instead of
+ * unsafe type punning through pointer casts. The old implementation caused
+ * undefined behavior. See type_utils.h for implementation details.
  */
-#if PAWN_CELL_SIZE==32
-  #define amx_ftoc(f)   ( * ((cell*)&f) )   /* float to cell */
-  #define amx_ctof(c)   ( * ((float*)&c) )  /* cell to float */
-#elif PAWN_CELL_SIZE==64
-  #define amx_ftoc(f)   ( * ((cell*)&f) )   /* float to cell */
-  #define amx_ctof(c)   ( * ((double*)&c) ) /* cell to float */
+#ifdef __cplusplus
+  // C++ code gets the safe implementation from type_utils.h
+  #include "type_utils.h"
+  // amx_ftoc and amx_ctof are now defined in type_utils.h
 #else
-  #error Unsupported cell size
+  // C code still uses the old (unsafe) macros for compatibility
+  // TODO: Port C code to C++ to enable safe casting
+  #if PAWN_CELL_SIZE==32
+    #define amx_ftoc(f)   ( * ((cell*)&f) )   /* float to cell */
+    #define amx_ctof(c)   ( * ((float*)&c) )  /* cell to float */
+  #elif PAWN_CELL_SIZE==64
+    #define amx_ftoc(f)   ( * ((cell*)&f) )   /* float to cell */
+    #define amx_ctof(c)   ( * ((double*)&c) ) /* cell to float */
+  #else
+    #error Unsupported cell size
+  #endif
 #endif
 
 #define amx_StrParam(amx,param,result)                                      \
@@ -373,9 +385,9 @@ typedef void (*BROWSEHOOK)(AMX *amx, cell *oplist, cell *cip);
       amx_GetAddr((amx), (param), &amx_cstr_);                              \
       amx_StrLen(amx_cstr_, &amx_length_);                                  \
       if (amx_length_ > 0 &&                                                \
-          ((result) = (void*)alloca((amx_length_ + 1) * sizeof(*(result)))) != NULL) \
+          ((result) = (void*)alloca((amx_length_ + 1) * sizeof(*(result)))) != nullptr) \
         amx_GetString((char*)(result), amx_cstr_, sizeof(*(result))>1, amx_length_); \
-      else (result) = NULL;                                                 \
+      else (result) = nullptr;                                                 \
     } while (0)
 
 uint16_t * AMXAPI amx_Align16(uint16_t *v);

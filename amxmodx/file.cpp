@@ -1230,5 +1230,5 @@ AMX_NATIVE_INFO file_Natives[] =
 	{"FileWriteInt16",		File_WriteTyped<int16_t>},
 	{"FileWriteInt32",		File_WriteTyped<int32_t>},
 
-	{NULL,				NULL}
+	{nullptr,				nullptr}
 };

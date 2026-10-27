@@ -33,7 +33,7 @@ public:
 	{
 		if (!GrowIfNeeded(1))
 		{
-			return NULL;
+			return nullptr;
 		}
 		cell *arr = &m_Data[m_Size * m_BlockSize];
 		m_Size++;

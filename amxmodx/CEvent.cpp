@@ -51,13 +51,13 @@ EventsMngr::ClEvent::ClEvent(CPluginMngr::CPlugin* plugin, int func, int flags)
 	m_Done = false;
 	m_State = FSTATE_ACTIVE;
 
-	m_Conditions = NULL;
+	m_Conditions = nullptr;
 }
 
 EventsMngr::ClEvent::~ClEvent()
 {
 	cond_t *tmp1 = m_Conditions;
-	cond_t *tmp2 = NULL;
+	cond_t *tmp2 = nullptr;
 	
 	while (tmp1)
 	{
@@ -66,7 +66,7 @@ EventsMngr::ClEvent::~ClEvent()
 		tmp1 = tmp2;
 	}
 	
-	m_Conditions = NULL;
+	m_Conditions = nullptr;
 }
 
 void EventsMngr::NextParam()
@@ -76,7 +76,7 @@ void EventsMngr::NextParam()
 	if (m_ParsePos < m_ParseVaultSize)
 		return;
 
-	MsgDataEntry *tmp = NULL;
+	MsgDataEntry *tmp = nullptr;
 	int tmpSize = 0;
 	
 	if (m_ParseVault)
@@ -92,7 +92,7 @@ void EventsMngr::NextParam()
 		memcpy(tmp, m_ParseVault, m_ParseVaultSize * sizeof(MsgDataEntry));
 		tmpSize = m_ParseVaultSize;
 		delete [] m_ParseVault;
-		m_ParseVault = NULL;
+		m_ParseVault = nullptr;
 	}
 
 	if (m_ParseVaultSize > 0)
@@ -106,7 +106,7 @@ void EventsMngr::NextParam()
 	{
 		memcpy(m_ParseVault, tmp, tmpSize * sizeof(MsgDataEntry));
 		delete [] tmp;
-		tmp = NULL;
+		tmp = nullptr;
 	}
 }
 
@@ -180,7 +180,7 @@ void EventsMngr::ClEvent::registerFilter(char *filter)
 	tmpCond->fValue = static_cast<float>(atof(value));
 	tmpCond->iValue = atoi(value);
 	
-	tmpCond->next = NULL;
+	tmpCond->next = nullptr;
 
 	if (m_Conditions)
 	{
@@ -432,7 +432,7 @@ void EventsMngr::executeEvents()
 
 	// Store old read data, which are either default values or previous event data
 	int oldMsgType = m_ReadMsgType, oldReadPos = m_ReadPos;
-	MsgDataEntry *oldReadVault = m_ReadVault, *readVault = NULL;
+	MsgDataEntry *oldReadVault = m_ReadVault, *readVault = nullptr;
 	
 	// We have a re-entrant call
 	if (reentrant++)

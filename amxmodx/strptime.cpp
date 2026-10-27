@@ -177,13 +177,13 @@ Other:
       case 'A':
          ti->qw = ii = scan_word(buf, 7,
                                 _lc_Wday_[_lc_Txt_],
-                                _lc_Txt_? _lc_WdayS: NULL);  break;
+                                _lc_Txt_? _lc_WdayS: nullptr);  break;
       case 'h': /* STRFTIME_EXT */
       case 'b':
       case 'B':
          ti->qm = ii = scan_word(buf, 12,
                                 _lc_Month_[_lc_Txt_],
-                                _lc_Txt_? _lc_MonthS: NULL); break;
+                                _lc_Txt_? _lc_MonthS: nullptr); break;
       case 'c':
          fs = _lc_fmt_c_[_lc_Fmt_];
 strpt:   ii = time_int(ti, buf, fs, addthem);          break;
@@ -332,7 +332,7 @@ char *strptime(const char *buf, const char *fmt, struct tm *tm, short addthem)
                ti.qU =     /* week in year (0...53) */
                ti.qV = -1; /* week in year mode: 0=U, 1=W, 2=V */
 
- if (0 > time_int(&ti, (const unsigned char **)&buf, fmt, addthem)) buf = NULL;
+ if (0 > time_int(&ti, (const unsigned char **)&buf, fmt, addthem)) buf = nullptr;
  if (0 <= ti.qS) (*defoper) ( &tm->tm_sec ,  ti.qS );
  if (0 <= ti.qM) (*defoper) ( &tm->tm_min ,  ti.qM ); //tm->tm_min  = ti.qM;
  if (0 <= ti.qI)
@@ -393,15 +393,15 @@ char *strptime(const char *buf, const char *fmt, struct tm *tm, short addthem)
        int mon = (ti.qj + day) % 7;
 
        if (0 > ti.qw) ti.qw = mon;
-       else if (ti.qw != mon) return NULL;
+       else if (ti.qw != mon) return nullptr;
 
        for(mon = 11; 0 > (day =     /* not for 2100: && ti.qY != 200 */
                      ti.qj - (m_days[mon] + (mon > 1 && !(ti.qY & 3))))
          ; mon--);
        if (0 > ti.qd) ti.qd = day;
-       else if (ti.qd != day) return NULL;
+       else if (ti.qd != day) return nullptr;
        if (0 > ti.qm) ti.qm = mon;
-       else if (ti.qm != mon) return NULL;
+       else if (ti.qm != mon) return nullptr;
       }
 #endif
    }

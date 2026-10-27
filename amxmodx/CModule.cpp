@@ -47,7 +47,7 @@ void CModule::clear(bool clearFilename)
 {
 	// old & new
 	m_Metamod = false;
-	m_Handle = NULL;
+	m_Handle = nullptr;
 	m_Status = MODULE_NONE;
 
 	if (clearFilename)
@@ -60,7 +60,7 @@ void CModule::clear(bool clearFilename)
 	m_InfoNew.name = "unknown";
 	m_InfoNew.version = "unknown";
 	m_InfoNew.reload = 0;
-	m_MissingFunc = NULL;
+	m_MissingFunc = nullptr;
 
 	for (size_t i=0; i<m_DestroyableIndexes.length(); i++)
 	{
@@ -75,7 +75,7 @@ void CModule::clear(bool clearFilename)
 bool CModule::attachMetamod(const char *mmfile, PLUG_LOADTIME now)
 {
 	void **handle;
-	void *dummy = NULL;
+	void *dummy = nullptr;
 
 	if (!m_Handle)
 		handle = &dummy;
@@ -103,10 +103,10 @@ void CModule::rewriteNativeLists(AMX_NATIVE_INFO *list)
 		bool changed = false;
 		bool found = false;
 		ke::Vector<size_t> newlist;
-		for (size_t j=0; curlist[j].func != NULL; j++)
+		for (size_t j=0; curlist[j].func != nullptr; j++)
 		{
 			found = false;
-			for (size_t k=0; list[k].func != NULL; k++)
+			for (size_t k=0; list[k].func != nullptr; k++)
 			{
 				if (strcmp(curlist[j].name, list[k].name) == 0)
 				{
@@ -131,8 +131,8 @@ void CModule::rewriteNativeLists(AMX_NATIVE_INFO *list)
 				rlist[j].func = curlist[newlist[j]].func;
 				rlist[j].name = curlist[newlist[j]].name;
 			}
-			rlist[newlist.length()].func = NULL;
-			rlist[newlist.length()].name = NULL;
+			rlist[newlist.length()].func = nullptr;
+			rlist[newlist.length()].name = nullptr;
 			m_Natives[i] = rlist;
 			m_DestroyableIndexes.append(i);
 		}
@@ -153,7 +153,7 @@ bool CModule::attachModule()
 	g_ModuleCallReason = ModuleCall_Attach;
 	g_CurrentlyCalledModule = this;
 	int retVal = (*AttachFunc_New)(Module_ReqFnptr);
-	g_CurrentlyCalledModule = NULL;
+	g_CurrentlyCalledModule = nullptr;
 	g_ModuleCallReason = ModuleCall_NotCalled;
 
 	switch (retVal)
@@ -213,7 +213,7 @@ bool CModule::queryModule()
 		g_ModuleCallReason = ModuleCall_Query;
 		g_CurrentlyCalledModule = this;
 		int retVal = (*queryFunc_New)(&ifVers, &m_InfoNew);
-		g_CurrentlyCalledModule = NULL;
+		g_CurrentlyCalledModule = nullptr;
 		g_ModuleCallReason = ModuleCall_NotCalled;
 
 		switch (retVal)
@@ -231,7 +231,7 @@ bool CModule::queryModule()
 						g_ModuleCallReason = ModuleCall_Query;
 						g_CurrentlyCalledModule = this;
 						retVal = (*queryFunc_New)(&ifVers, &m_InfoNew);
-						g_CurrentlyCalledModule = NULL;
+						g_CurrentlyCalledModule = nullptr;
 						g_ModuleCallReason = ModuleCall_NotCalled;
 						if (retVal == AMXX_OK)
 						{
@@ -318,7 +318,7 @@ bool CModule::detachModule()
 		g_ModuleCallReason = ModuleCall_Detach;
 		g_CurrentlyCalledModule = this;
 		(*detachFunc_New)();
-		g_CurrentlyCalledModule = NULL;
+		g_CurrentlyCalledModule = nullptr;
 		g_ModuleCallReason = ModuleCall_NotCalled;
 	}
 

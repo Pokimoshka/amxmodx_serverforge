@@ -45,7 +45,7 @@ static cell AMX_NATIVE_CALL VelocityByAim(AMX *amx, cell *params)
 	int iVelocity = params[2];
 	cell *vRet = get_amxaddr(amx, params[3]);
 	Vector vVector = Vector(0, 0, 0);
-	edict_t *pEnt = NULL;
+	edict_t *pEnt = nullptr;
 
 	if (iEnt < 0 || iEnt > gpGlobals->maxEntities)
 	{
@@ -179,5 +179,5 @@ AMX_NATIVE_INFO vector_Natives[] = {
 	{"angle_vector",		angle_vector},
 	{"vector_length",		vector_length},
 	{"vector_distance",		vector_distance},
-	{NULL,					NULL},
+	{nullptr,					nullptr},
 };

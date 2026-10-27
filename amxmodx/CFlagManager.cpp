@@ -85,8 +85,8 @@ const int CFlagManager::LoadFile(const int force)
 
 		nonconst = TempLine;
 
-		char *start=NULL;
-		char *end=NULL;
+		char *start=nullptr;
+		char *end=nullptr;
 
 		// move up line until the first ", mark this down as the start
 		// then find the second " and mark it down as the end
@@ -94,7 +94,7 @@ const int CFlagManager::LoadFile(const int force)
 		{
 			if (*nonconst=='"')
 			{
-				if (start==NULL)
+				if (start==nullptr)
 				{
 					start=nonconst+1;
 				}
@@ -109,7 +109,7 @@ const int CFlagManager::LoadFile(const int force)
 done_with_command:
 
 		// invalid line?
-		if (start==NULL || end==NULL)
+		if (start==nullptr || end==nullptr)
 		{
 			// TODO: maybe warn for an invalid non-commented line?
 			continue;
@@ -122,8 +122,8 @@ done_with_command:
 		// Now do the same thing for the flags
 		nonconst=++end;
 
-		start=NULL;
-		end=NULL;
+		start=nullptr;
+		end=nullptr;
 
 		// move up line until the first ", mark this down as the start
 		// then find the second " and mark it down as the end
@@ -131,7 +131,7 @@ done_with_command:
 		{
 			if (*nonconst=='"')
 			{
-				if (start==NULL)
+				if (start==nullptr)
 				{
 					start=nonconst+1;
 				}
@@ -145,7 +145,7 @@ done_with_command:
 		}
 done_with_flags:
 		// invalid line?
-		if (start==NULL || end==NULL)
+		if (start==nullptr || end==nullptr)
 		{
 			// TODO: maybe warn for an invalid non-commented line?
 			continue;

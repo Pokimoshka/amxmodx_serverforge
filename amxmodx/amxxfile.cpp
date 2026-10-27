@@ -45,13 +45,13 @@ struct TableEntry
 		else \
 			m_Status = Err_FileRead; \
 		fclose(m_pFile); \
-		m_pFile = NULL; \
+		m_pFile = nullptr; \
 		return; \
 	}
 
 CAmxxReader::CAmxxReader(const char *filename, int cellsize)
 {
-	m_Bh.plugins = NULL;
+	m_Bh.plugins = nullptr;
 	m_AmxxFile = false;
 	
 	if (!filename)
@@ -80,7 +80,7 @@ CAmxxReader::CAmxxReader(const char *filename, int cellsize)
 		//we have an invalid, old, RLEB file
 		m_Status = Err_OldFile;
 		fclose(m_pFile);
-		m_pFile = NULL;
+		m_pFile = nullptr;
 		
 		return;
 	}
@@ -92,7 +92,7 @@ CAmxxReader::CAmxxReader(const char *filename, int cellsize)
 		{
 			m_Status = Err_OldFile;
 			fclose(m_pFile);
-			m_pFile = NULL;
+			m_pFile = nullptr;
 			
 			return;
 		}
@@ -129,7 +129,7 @@ CAmxxReader::CAmxxReader(const char *filename, int cellsize)
 		{
 			m_Status = Err_SectionNotFound;
 			fclose(m_pFile);
-			m_pFile = NULL;
+			m_pFile = nullptr;
 			
 			return;
 		}
@@ -162,7 +162,7 @@ CAmxxReader::CAmxxReader(const char *filename, int cellsize)
 		{
 			m_Status = Err_SectionNotFound;
 			fclose(m_pFile);
-			m_pFile = NULL;
+			m_pFile = nullptr;
 			return;
 		}
 
@@ -190,7 +190,7 @@ CAmxxReader::CAmxxReader(const char *filename, int cellsize)
 			{
 				m_Status = Err_SectionNotFound;
 				fclose(m_pFile);
-				m_pFile = NULL;
+				m_pFile = nullptr;
 				
 				return;
 			}
@@ -202,7 +202,7 @@ CAmxxReader::CAmxxReader(const char *filename, int cellsize)
 			// no known file format
 			m_Status = Err_FileInvalid;
 			fclose(m_pFile);
-			m_pFile = NULL;
+			m_pFile = nullptr;
 			
 			return;
 		}
@@ -214,13 +214,13 @@ CAmxxReader::~CAmxxReader()
 	if (m_pFile)
 	{
 		fclose(m_pFile);
-		m_pFile = NULL;
+		m_pFile = nullptr;
 	}
 	
 	if (m_Bh.plugins)
 	{
 		delete [] m_Bh.plugins;
-		m_Bh.plugins = NULL;
+		m_Bh.plugins = nullptr;
 	}
 }
 
@@ -238,7 +238,7 @@ CAmxxReader::Error CAmxxReader::GetStatus()
 		else \
 			m_Status = Err_FileRead; \
 		fclose(m_pFile); \
-		m_pFile = NULL; \
+		m_pFile = nullptr; \
 		return 0; \
 	}
 
@@ -286,7 +286,7 @@ size_t CAmxxReader::GetBufferSize()
 		else \
 			m_Status = Err_FileRead; \
 		fclose(m_pFile); \
-		m_pFile = NULL; \
+		m_pFile = nullptr; \
 		return m_Status; \
 	}
 #define DATAREAD_RELEASE(addr, itemsize, itemcount) \
@@ -297,7 +297,7 @@ size_t CAmxxReader::GetBufferSize()
 		else \
 			m_Status = Err_FileRead; \
 		fclose(m_pFile); \
-		m_pFile = NULL; \
+		m_pFile = nullptr; \
 		delete[] tempBuffer;\
 		return m_Status; \
 	}

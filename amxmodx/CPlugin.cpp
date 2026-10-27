@@ -133,7 +133,7 @@ int CPluginMngr::loadPluginsFromFile(const char* filename, bool warn)
 			continue;
 		}
 
-		if (findPlugin(pluginName) != NULL)
+		if (findPlugin(pluginName) != nullptr)
 		{
 			continue;
 		}
@@ -215,7 +215,7 @@ void CPluginMngr::clear()
 	if (pNatives)
 	{
 		delete [] pNatives;
-		pNatives = NULL;
+		pNatives = nullptr;
 	}
 
 	List<ke::AString *>::iterator iter = m_BlockList.begin();
@@ -389,7 +389,7 @@ static cell AMX_NATIVE_CALL invalid_native(AMX *amx, cell *params)
 	if (!pHandler->HandleNative(name, native, 1))
 	{
 		amx->usertags[UT_NATIVE] = (void *)native;
-		LogError(amx, AMX_ERR_INVNATIVE, NULL);
+		LogError(amx, AMX_ERR_INVNATIVE, nullptr);
 		return 0;
 	}
 
@@ -538,12 +538,12 @@ char *CPluginMngr::ReadIntoOrFromCache(const char *file, size_t &bufsize)
 	pl = new plcache_entry;
 
 	pl->file = new CAmxxReader(file, sizeof(cell));
-	pl->buffer = NULL;
+	pl->buffer = nullptr;
 	if (pl->file->GetStatus() != CAmxxReader::Err_None)
 	{
 		delete pl->file;
 		delete pl;
-		return NULL;
+		return nullptr;
 	}
 
 	pl->bufsize = pl->file->GetBufferSize();
@@ -558,7 +558,7 @@ char *CPluginMngr::ReadIntoOrFromCache(const char *file, size_t &bufsize)
 		delete [] pl->buffer;
 		delete pl->file;
 		delete pl;
-		return NULL;
+		return nullptr;
 	}
 
 	pl->path = file;

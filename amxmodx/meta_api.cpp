@@ -137,14 +137,14 @@ cvar_t init_amxmodx_language = {"amx_language", "en", FCVAR_SERVER};
 cvar_t init_amxmodx_cl_langs = {"amx_client_languages", "1", FCVAR_SERVER};
 cvar_t init_amxmodx_perflog = { "amx_perflog_ms", "1.0", FCVAR_SPONLY };
 
-cvar_t* amxmodx_version = NULL;
-cvar_t* amxmodx_modules = NULL;
-cvar_t* amxmodx_debug = NULL;
-cvar_t* amxmodx_language = NULL;
-cvar_t* amxmodx_perflog = NULL;
+cvar_t* amxmodx_version = nullptr;
+cvar_t* amxmodx_modules = nullptr;
+cvar_t* amxmodx_debug = nullptr;
+cvar_t* amxmodx_language = nullptr;
+cvar_t* amxmodx_perflog = nullptr;
 
-cvar_t* hostname = NULL;
-cvar_t* mp_timelimit = NULL;
+cvar_t* hostname = nullptr;
+cvar_t* mp_timelimit = nullptr;
 
 // main forwards
 int FF_ClientCommand = -1;
@@ -634,7 +634,7 @@ void C_ServerActivate(edict_t *pEdictList, int edictCount, int clientMax)
 
 	for (int i = 0; g_user_msg[i].name;	++i)
 	{
-		if ((*g_user_msg[i].id == 0) && (id = GET_USER_MSG_ID(PLID, g_user_msg[i].name, NULL)) != 0)
+		if ((*g_user_msg[i].id == 0) && (id = GET_USER_MSG_ID(PLID, g_user_msg[i].name, nullptr)) != 0)
 		{
 			*g_user_msg[i].id =	id;
 
@@ -1451,7 +1451,7 @@ void C_WriteEntity_Post(int iValue)
 void C_MessageEnd_Post(void)
 {
 	g_events.executeEvents();
-	if (endfunction) (*endfunction)(NULL);
+	if (endfunction) (*endfunction)(nullptr);
 
 	RETURN_META(MRES_IGNORED);
 }
@@ -1463,7 +1463,7 @@ const char *C_Cmd_Args(void)
 		RETURN_META_VALUE(MRES_SUPERCEDE, (g_fakecmd.argc > 1) ? g_fakecmd.args : g_fakecmd.argv[0]);
 
 	// otherwise ignore it
-	RETURN_META_VALUE(MRES_IGNORED, NULL);
+	RETURN_META_VALUE(MRES_IGNORED, nullptr);
 }
 
 const char *C_Cmd_Argv(int argc)
@@ -1473,7 +1473,7 @@ const char *C_Cmd_Argv(int argc)
 		RETURN_META_VALUE(MRES_SUPERCEDE, (argc < 3) ? g_fakecmd.argv[argc] : "");
 
 	// otherwise ignore it
-	RETURN_META_VALUE(MRES_IGNORED, NULL);
+	RETURN_META_VALUE(MRES_IGNORED, nullptr);
 }
 
 int	C_Cmd_Argc(void)
@@ -1721,7 +1721,7 @@ C_DLLEXPORT	int	Meta_Attach(PLUG_LOADTIME now, META_FUNCTIONS *pFunctionTable, m
 	// This will also call modules Meta_Query and Meta_Attach functions
 	loadModules(get_localinfo("amxx_modules", "addons/amxmodx/configs/modules.ini"), now);
 
-	GET_HOOK_TABLES(PLID, &g_pEngTable, NULL, NULL);
+	GET_HOOK_TABLES(PLID, &g_pEngTable, nullptr, nullptr);
 
 	FlagMan.SetFile("cmdaccess.ini");
 

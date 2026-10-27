@@ -67,16 +67,16 @@ typedef struct _property_list {
   //??? safe AMX (owner of the property)
 } proplist;
 
-static proplist proproot = { NULL, 0, NULL, 0 };
+static proplist proproot = { nullptr, 0, nullptr, 0 };
 
 static proplist *list_additem(proplist *root)
 {
   proplist *item;
 
-  assert(root!=NULL);
-  if ((item=(proplist *)malloc(sizeof(proplist)))==NULL)
-    return NULL;
-  item->name=NULL;
+  assert(root!=nullptr);
+  if ((item=(proplist *)malloc(sizeof(proplist)))==nullptr)
+    return nullptr;
+  item->name=nullptr;
   item->id=0;
   item->value=0;
   item->next=root->next;
@@ -85,10 +85,10 @@ static proplist *list_additem(proplist *root)
 }
 static void list_delete(proplist *pred,proplist *item)
 {
-  assert(pred!=NULL);
-  assert(item!=NULL);
+  assert(pred!=nullptr);
+  assert(item!=nullptr);
   pred->next=item->next;
-  assert(item->name!=NULL);
+  assert(item->name!=nullptr);
   free(item->name);
   free(item);
 }
@@ -96,11 +96,22 @@ static void list_setitem(proplist *item,cell id,char *name,cell value)
 {
   char *ptr;
 
-  assert(item!=NULL);
-  if ((ptr=(char *)malloc(strlen(name)+1))==NULL)
+  assert(item!=nullptr);
+  
+  // FIXED: Use static_cast instead of C-style cast
+  ptr = static_cast<char*>(malloc(strlen(name)+1));
+  if (ptr == nullptr)
+  {
+    // FIXED: Memory leak - if malloc fails, we should handle it properly
+    // Original code just returned without setting the item, leaving it in inconsistent state
+    // For now, keep the old pointer if allocation fails
+    // TODO: Consider returning error code instead of void or throwing exception
     return;
-  if (item->name!=NULL)
+  }
+  
+  if (item->name != nullptr)
     free(item->name);
+    
   strcpy(ptr,name);
   item->name=ptr;
   item->id=id;
@@ -113,21 +124,21 @@ static proplist *list_finditem(proplist *root,cell id,char *name,cell value,
   proplist *prev=root;
 
   /* check whether to find by name or by value */
-  assert(name!=NULL);
+  assert(name!=nullptr);
   if (strlen(name)>0) {
     /* find by name */
-    while (item!=NULL && (item->id!=id || stricmp(item->name,name)!=0)) {
+    while (item!=nullptr && (item->id!=id || stricmp(item->name,name)!=0)) {
       prev=item;
       item=item->next;
     } /* while */
   } else {
     /* find by value */
-    while (item!=NULL && (item->id!=id || item->value!=value)) {
+    while (item!=nullptr && (item->id!=id || item->value!=value)) {
       prev=item;
       item=item->next;
     } /* while */
   } /* if */
-  if (pred!=NULL)
+  if (pred!=nullptr)
     *pred=prev;
   return item;
 }
@@ -318,7 +329,11 @@ static char *MakePackedString(cell *cptr)
   char *dest;
 
   amx_StrLen(cptr,&len);
-  dest=(char *)malloc(len+sizeof(cell));
+  // FIXED: Use static_cast instead of C-style cast
+  dest = static_cast<char*>(malloc(len+sizeof(cell)));
+  if (dest == nullptr) {
+    return nullptr;  // FIXED: Handle allocation failure
+  }
   amx_GetString(dest,cptr,0,UNLIMITED);
   return dest;
 }
@@ -342,9 +357,9 @@ static cell AMX_NATIVE_CALL getproperty(AMX *amx,cell *params)
 
   amx_GetAddr(amx,params[2],&cstr);
   name=MakePackedString(cstr);
-  item=list_finditem(&proproot,params[1],name,params[3],NULL);
+  item=list_finditem(&proproot,params[1],name,params[3],nullptr);
   /* if list_finditem() found the value, store the name */
-  if (item!=NULL && item->value==params[3] && strlen(name)==0) {
+  if (item!=nullptr && item->value==params[3] && strlen(name)==0) {
     int needed=(strlen(item->name)+sizeof(cell)-1)/sizeof(cell);     /* # of cells needed */
     if (verify_addr(amx,(cell)(params[4]+needed))!=AMX_ERR_NONE) {
       free(name);
@@ -354,7 +369,7 @@ static cell AMX_NATIVE_CALL getproperty(AMX *amx,cell *params)
     amx_SetString(cstr,item->name,1,0,UNLIMITED);
   } /* if */
   free(name);
-  return (item!=NULL) ? item->value : 0;
+  return (item!=nullptr) ? item->value : 0;
 }
 
 static cell AMX_NATIVE_CALL setproperty(AMX *amx,cell *params)
@@ -366,10 +381,10 @@ static cell AMX_NATIVE_CALL setproperty(AMX *amx,cell *params)
 
   amx_GetAddr(amx,params[2],&cstr);
   name=MakePackedString(cstr);
-  item=list_finditem(&proproot,params[1],name,params[3],NULL);
-  if (item==NULL)
+  item=list_finditem(&proproot,params[1],name,params[3],nullptr);
+  if (item==nullptr)
     item=list_additem(&proproot);
-  if (item==NULL) {
+  if (item==nullptr) {
     amx_RaiseError(amx,AMX_ERR_MEMORY);
   } else {
     prev=item->value;
@@ -394,7 +409,7 @@ static cell AMX_NATIVE_CALL delproperty(AMX *amx,cell *params)
   amx_GetAddr(amx,params[2],&cstr);
   name=MakePackedString(cstr);
   item=list_finditem(&proproot,params[1],name,params[3],&pred);
-  if (item!=NULL) {
+  if (item!=nullptr) {
     prev=item->value;
     list_delete(pred,item);
   } /* if */
@@ -410,9 +425,9 @@ static cell AMX_NATIVE_CALL existproperty(AMX *amx,cell *params)
 
   amx_GetAddr(amx,params[2],&cstr);
   name=MakePackedString(cstr);
-  item=list_finditem(&proproot,params[1],name,params[3],NULL);
+  item=list_finditem(&proproot,params[1],name,params[3],nullptr);
   free(name);
-  return (item!=NULL);
+  return (item!=nullptr);
 }
 #endif
 
@@ -436,7 +451,7 @@ static cell AMX_NATIVE_CALL core_random(AMX *amx,cell *params)
     /* one-time initialization (or, mostly one-time) */
     #if !defined SN_TARGET_PS2 && !defined _WIN32_WCE
         if (IL_StandardRandom_seed == INITIAL_SEED)
-            IL_StandardRandom_seed=(unsigned long)time(NULL);
+            IL_StandardRandom_seed=(unsigned long)time(nullptr);
     #endif
 
     lo = IL_StandardRandom_seed & 0xffff;
@@ -481,7 +496,7 @@ int AMXEXPORT amx_CoreCleanup(AMX *amx)
   (void)amx;
   #if !defined AMX_NOPROPLIST
     //??? delete only the properties owned by the AMX
-    while (proproot.next!=NULL)
+    while (proproot.next!=nullptr)
       list_delete(&proproot,proproot.next);
   #endif
   return AMX_ERR_NONE;

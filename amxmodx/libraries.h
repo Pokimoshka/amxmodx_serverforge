@@ -53,15 +53,15 @@ enum LibError
 class LibDecoder
 {
 public:
-	LibDecoder() : buffer(NULL)
+	LibDecoder() : buffer(nullptr)
 	{
 	}
 	~LibDecoder()
 	{
 		free(buffer);
-		buffer = NULL;
-		param1 = NULL;
-		param2 = NULL;
+		buffer = nullptr;
+		param1 = nullptr;
+		param2 = nullptr;
 	}
 	char *buffer;
 	char *param1;
@@ -69,9 +69,9 @@ public:
 	LibCmd cmd;
 };
 
-bool AddLibrary(const char *name, LibType type, LibSource src, void *parent=NULL);
+bool AddLibrary(const char *name, LibType type, LibSource src, void *parent=nullptr);
 bool DecodeLibCmdString(const char *str, LibDecoder *cmd);
-size_t AddLibrariesFromString(const char *name, LibType type, LibSource src, void *parent=NULL);
+size_t AddLibrariesFromString(const char *name, LibType type, LibSource src, void *parent=nullptr);
 size_t ClearLibraries(LibSource src);
 LibError RunLibCommand(const LibDecoder *enc);
 size_t RemoveLibraries(void *parent);

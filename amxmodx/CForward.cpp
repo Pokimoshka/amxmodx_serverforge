@@ -135,7 +135,7 @@ cell CForward::execute(cell *params, ForwardPreparedArray *preparedArrays)
 				else if (err != -1)
 				{
 					//nothing logged the error so spit it out anyway
-					LogError(amx, err, NULL);
+					LogError(amx, err, nullptr);
 				}
 			}
 			
@@ -338,7 +338,7 @@ cell CSPForward::execute(cell *params, ForwardPreparedArray *preparedArrays)
 		else if (err != -1)
 		{
 			//nothing logged the error so spit it out anyway
-			LogError(m_Amx, err, NULL);
+			LogError(m_Amx, err, nullptr);
 		}
 	}
 	

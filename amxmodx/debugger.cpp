@@ -170,11 +170,11 @@ Debugger::Tracer::~Tracer()
 
 void Debugger::Tracer::StepI(cell frm, cell cip)
 {
-	if (m_pEnd == NULL)
+	if (m_pEnd == nullptr)
 	{
 		assert(m_Reset);
 
-		if (m_pStart == NULL)
+		if (m_pStart == nullptr)
 			m_pStart = new trace_info();
 
 		m_pEnd = m_pStart;
@@ -223,8 +223,8 @@ void Debugger::Tracer::Clear()
 		pInfo = pNext;
 	}
 
-	m_pStart = NULL;
-	m_pEnd = NULL;
+	m_pStart = nullptr;
+	m_pEnd = nullptr;
 	m_Error = AMX_ERR_NONE;
 	m_Reset = true;
 }
@@ -239,7 +239,7 @@ void Debugger::Tracer::Reset()
 		pInfo = pInfo->next;
 	}
 
-	m_pEnd = NULL;
+	m_pEnd = nullptr;
 	m_Error = AMX_ERR_NONE;
 	m_Reset = true;
 }
@@ -339,7 +339,7 @@ bool Debugger::GetTraceInfo(trace_info_t *pTraceInfo, long &line, const char *&f
 trace_info_t *Debugger::GetNextTrace(trace_info_t *pTraceInfo)
 {
 	if (!pTraceInfo->prev || !pTraceInfo->prev->used)
-		return NULL;
+		return nullptr;
 
 	return pTraceInfo->prev;
 }
@@ -414,7 +414,7 @@ int Debugger::_GetOpcodeFromCip(cell cip, cell *&addr)
 	AMX_HEADER *hdr = (AMX_HEADER*)(m_pAmx->base);
 	unsigned char *code = m_pAmx->base + (int)hdr->cod;
 
-	cell *p_cip = NULL;
+	cell *p_cip = nullptr;
 	//test if cip is between these 
 	if (cip >= (cell)code && cip < (cell)(m_pAmx->base + (int)hdr->dat))
 	{
@@ -463,7 +463,7 @@ const char *GenericError(int err)
 {
 	static const char *amx_errs[] =
 	{
-		NULL,
+		nullptr,
 		"forced exit",
 		"assertion failed",
 		"stack error",
@@ -492,7 +492,7 @@ const char *GenericError(int err)
 		"domain error",
 	};
 	//does this plugin have line ops?
-	const char *geterr = NULL;
+	const char *geterr = nullptr;
 	if (err <= 26 && err > 0)
 		geterr = amx_errs[err];
 
@@ -501,7 +501,7 @@ const char *GenericError(int err)
 
 int AMXAPI Debugger::DebugHook(AMX *amx)
 {
-	Debugger *pDebugger = NULL;
+	Debugger *pDebugger = nullptr;
 
 	if (!amx || !(amx->flags & AMX_FLAG_DEBUG))
 		return AMX_ERR_NONE;
@@ -531,7 +531,7 @@ void Debugger::Clear()
 
 void Debugger::DisplayTrace(const char *message)
 {
-	if (message != NULL)
+	if (message != nullptr)
 		AMXXLOG_Error("%s", message);
 
 	char buffer[512];
@@ -705,7 +705,7 @@ void Handler::SetErrorMsg(const char *msg)
 const char *Handler::GetLastMsg()
 {
 	if (m_MsgCache.length() < 1)
-		return NULL;
+		return nullptr;
 
 	return m_MsgCache.chars();
 }
@@ -789,7 +789,7 @@ int Handler::HandleNative(const char *native, int index, int trap)
 		{
 			//don't display, it was already handled.
 		} else if (err != -1) {
-			LogError(m_pAmx, err, NULL);
+			LogError(m_pAmx, err, nullptr);
 		}
 		AMXXLOG_Error("[AMXX] NOTE: Runtime failures in native filters are not good!");
 		retval = 0;
@@ -938,7 +938,7 @@ static cell AMX_NATIVE_CALL dbg_trace_info(AMX *amx, cell *params)
 
 	cell *line_addr = get_amxaddr(amx, params[2]);
 	long lLine=-1;
-	const char *function=NULL, *file=NULL;
+	const char *function=nullptr, *file=nullptr;
 
 	pDebugger->GetTraceInfo(pTrace, lLine, function, file);
 
@@ -1021,5 +1021,5 @@ AMX_NATIVE_INFO g_DebugNatives[] = {
 	{"dbg_fmt_error",		dbg_fmt_error},
 	{"set_native_filter",	set_native_filter},
 	{"set_module_filter",	set_module_filter},
-	{NULL,					NULL},
+	{nullptr,					nullptr},
 };
